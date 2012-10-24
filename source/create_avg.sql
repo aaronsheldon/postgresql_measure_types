@@ -1,0 +1,1 @@
+﻿-- wrap generic _accumulate in average calculation

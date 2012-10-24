@@ -1,0 +1,1 @@
+﻿-- Use generic _accumulate to find sums
