@@ -4,19 +4,22 @@
 
 CREATE OR REPLACE FUNCTION _measure
 (
-	IN _lower_topology CHARACTER VARYING, 
-	IN _lower_preimage anyelement, 
-	IN _upper_preimage anyelement, 
-	IN _upper_topology CHARACTER VARYING,
-	IN _interval_image NUMERIC,
-	OUT _key_infinite BOOLEAN,
-	OUT _key_finite BOOLEAN,
-	OUT _key_preimage anyelement,
-	OUT _key_topology BOOLEAN,
-	OUT _key_operation BOOLEAN,
-	OUT _value_image NUMERIC
+	_lower_topology CHARACTER VARYING, 
+	_lower_preimage anyelement, 
+	_upper_preimage anyelement, 
+	_upper_topology CHARACTER VARYING,
+	_interval_image NUMERIC
 ) 
-RETURNS SETOF RECORD LANGUAGE sql IMMUTABLE AS
+RETURNS TABLE
+(
+	_key_infinite BOOLEAN,
+	_key_finite BOOLEAN,
+	_key_preimage anyelement,
+	_key_topology BOOLEAN,
+	_key_operation BOOLEAN,
+	_value_image NUMERIC
+)
+LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Partially Generic Polymorphic Interval Measure Constructor
@@ -110,19 +113,22 @@ $body$;
 
 CREATE OR REPLACE FUNCTION _measure
 (
-	IN _lower_topology CHARACTER VARYING, 
-	IN _lower_preimage anyelement, 
-	IN _upper_preimage anyelement, 
-	IN _upper_topology CHARACTER VARYING,
-	IN _interval_image CHARACTER VARYING,
-	OUT _key_infinite BOOLEAN,
-	OUT _key_finite BOOLEAN,
-	OUT _key_preimage anyelement,
-	OUT _key_topology BOOLEAN,
-	OUT _key_operation BOOLEAN,
-	OUT _value_image CHARACTER VARYING
+	_lower_topology CHARACTER VARYING, 
+	_lower_preimage anyelement, 
+	_upper_preimage anyelement, 
+	_upper_topology CHARACTER VARYING,
+	_interval_image CHARACTER VARYING
+)
+RETURNS TABLE
+(
+	_key_infinite BOOLEAN,
+	_key_finite BOOLEAN,
+	_key_preimage anyelement,
+	_key_topology BOOLEAN,
+	_key_operation BOOLEAN,
+	_value_image CHARACTER VARYING
 ) 
-RETURNS SETOF RECORD LANGUAGE sql IMMUTABLE AS
+LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Generic Polymorphic Interval Measure Constructor
@@ -216,19 +222,22 @@ $body$;
 
 CREATE OR REPLACE FUNCTION _measure
 (
-	IN _lower_topology CHARACTER VARYING, 
-	IN _lower_preimage anyelement, 
-	IN _upper_preimage anyelement, 
-	IN _upper_topology CHARACTER VARYING,
-	IN _interval_image TIMESTAMP,
-	OUT _key_infinite BOOLEAN,
-	OUT _key_finite BOOLEAN,
-	OUT _key_preimage anyelement,
-	OUT _key_topology BOOLEAN,
-	OUT _key_operation BOOLEAN,
-	OUT _value_image TIMESTAMP
+	_lower_topology CHARACTER VARYING, 
+	_lower_preimage anyelement, 
+	_upper_preimage anyelement, 
+	_upper_topology CHARACTER VARYING,
+	_interval_image TIMESTAMP
+)
+RETURNS TABLE
+(
+	_key_infinite BOOLEAN,
+	_key_finite BOOLEAN,
+	_key_preimage anyelement,
+	_key_topology BOOLEAN,
+	_key_operation BOOLEAN,
+	_value_image TIMESTAMP
 ) 
-RETURNS SETOF RECORD LANGUAGE sql IMMUTABLE AS
+LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Generic Polymorphic Interval Measure Constructor
@@ -322,19 +331,22 @@ $body$;
 
 CREATE OR REPLACE FUNCTION _measure
 (
-	IN _lower_topology CHARACTER VARYING, 
-	IN _lower_preimage anyelement, 
-	IN _upper_preimage anyelement, 
-	IN _upper_topology CHARACTER VARYING,
-	IN _interval_image INTERVAL,
-	OUT _key_infinite BOOLEAN,
-	OUT _key_finite BOOLEAN,
-	OUT _key_preimage anyelement,
-	OUT _key_topology BOOLEAN,
-	OUT _key_operation BOOLEAN,
-	OUT _value_image INTERVAL
+	_lower_topology CHARACTER VARYING, 
+	_lower_preimage anyelement, 
+	_upper_preimage anyelement, 
+	_upper_topology CHARACTER VARYING,
+	_interval_image INTERVAL
+)
+RETURNS TABLE
+(
+	_key_infinite BOOLEAN,
+	_key_finite BOOLEAN,
+	_key_preimage anyelement,
+	_key_topology BOOLEAN,
+	_key_operation BOOLEAN,
+	_value_image INTERVAL
 ) 
-RETURNS SETOF RECORD LANGUAGE sql IMMUTABLE AS
+LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Generic Polymorphic Interval Measure Constructor

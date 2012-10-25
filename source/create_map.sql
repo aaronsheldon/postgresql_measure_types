@@ -2,11 +2,7 @@
 -- Generic measure spaces --
 ----------------------------
 
-CREATE OR REPLACE FUNCTION _map
-(
-	_measure anyarray
-) 
-RETURNS SETOF RECORD LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _map (_measure anyarray) RETURNS SETOF RECORD LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Inverse Constructor to the Measure and Indicator Constructors
@@ -50,14 +46,16 @@ $body$;
 
 CREATE OR REPLACE FUNCTION map
 (
-	_measure numeric_numeric[], 
-	OUT lower_topology CHARACTER VARYING, 
-	OUT lower_preimage NUMERIC,
-	OUT upper_preimage NUMERIC, 
-	OUT upper_topology CHARACTER VARYING,
-	OUT interval_image NUMERIC
+	_measure numeric_numeric[]
+)
+RETURNS TABLE
+(
+	lower_preimage NUMERIC,
+	upper_preimage NUMERIC, 
+	upper_topology CHARACTER VARYING,
+	interval_image NUMERIC
 ) 
-RETURNS SETOF RECORD LANGUAGE sql IMMUTABLE AS
+LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type 
@@ -73,14 +71,17 @@ $body$;
 
 CREATE OR REPLACE FUNCTION map
 (
-	_measure numeric_varchar[], 
-	OUT lower_topology CHARACTER VARYING, 
-	OUT lower_preimage NUMERIC,
-	OUT upper_preimage NUMERIC, 
-	OUT upper_topology CHARACTER VARYING,
-	OUT interval_image CHARACTER VARYING
+	_measure numeric_varchar[]
+)
+RETURNS TABLE
+( 
+	lower_topology CHARACTER VARYING, 
+	lower_preimage NUMERIC,
+	upper_preimage NUMERIC, 
+	upper_topology CHARACTER VARYING,
+	interval_image CHARACTER VARYING
 ) 
-RETURNS SETOF RECORD LANGUAGE sql IMMUTABLE AS
+LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type 
@@ -96,14 +97,17 @@ $body$;
 
 CREATE OR REPLACE FUNCTION map
 (
-	_measure numeric_timestamp[], 
-	OUT lower_topology CHARACTER VARYING, 
-	OUT lower_preimage NUMERIC,
-	OUT upper_preimage NUMERIC, 
-	OUT upper_topology CHARACTER VARYING,
-	OUT interval_image TIMESTAMP
+	_measure numeric_timestamp[]
+)
+RETURNS TABLE
+( 
+	lower_topology CHARACTER VARYING, 
+	lower_preimage NUMERIC,
+	upper_preimage NUMERIC, 
+	upper_topology CHARACTER VARYING,
+	interval_image TIMESTAMP
 ) 
-RETURNS SETOF RECORD LANGUAGE sql IMMUTABLE AS
+LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type 
@@ -119,14 +123,17 @@ $body$;
 
 CREATE OR REPLACE FUNCTION map
 (
-	_measure numeric_interval[], 
-	OUT lower_topology CHARACTER VARYING, 
-	OUT lower_preimage NUMERIC,
-	OUT upper_preimage NUMERIC, 
-	OUT upper_topology CHARACTER VARYING,
-	OUT interval_image INTERVAL
+	_measure numeric_interval[]
+)
+RETURNS TABLE
+( 
+	lower_topology CHARACTER VARYING, 
+	lower_preimage NUMERIC,
+	upper_preimage NUMERIC, 
+	upper_topology CHARACTER VARYING,
+	interval_image INTERVAL
 ) 
-RETURNS SETOF RECORD LANGUAGE sql IMMUTABLE AS
+LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type 
@@ -146,14 +153,17 @@ $body$;
 
 CREATE OR REPLACE FUNCTION map
 (
-	_measure varchar_numeric[], 
-	OUT lower_topology CHARACTER VARYING, 
-	OUT lower_preimage CHARACTER VARYING,
-	OUT upper_preimage CHARACTER VARYING, 
-	OUT upper_topology CHARACTER VARYING,
-	OUT interval_image NUMERIC
+	_measure varchar_numeric[]
+)
+RETURNS TABLE
+( 
+	lower_topology CHARACTER VARYING, 
+	lower_preimage CHARACTER VARYING,
+	upper_preimage CHARACTER VARYING, 
+	upper_topology CHARACTER VARYING,
+	interval_image NUMERIC
 ) 
-RETURNS SETOF RECORD LANGUAGE sql IMMUTABLE AS
+LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type 
@@ -169,14 +179,17 @@ $body$;
 
 CREATE OR REPLACE FUNCTION map
 (
-	_measure varchar_varchar[], 
-	OUT lower_topology CHARACTER VARYING, 
-	OUT lower_preimage CHARACTER VARYING,
-	OUT upper_preimage CHARACTER VARYING, 
-	OUT upper_topology CHARACTER VARYING,
-	OUT interval_image CHARACTER VARYING
+	_measure varchar_varchar[]
+)
+RETURNS TABLE
+( 
+	lower_topology CHARACTER VARYING, 
+	lower_preimage CHARACTER VARYING,
+	upper_preimage CHARACTER VARYING, 
+	upper_topology CHARACTER VARYING,
+	interval_image CHARACTER VARYING
 ) 
-RETURNS SETOF RECORD LANGUAGE sql IMMUTABLE AS
+LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type 
@@ -192,14 +205,17 @@ $body$;
 
 CREATE OR REPLACE FUNCTION map
 (
-	_measure varchar_timestamp[], 
-	OUT lower_topology CHARACTER VARYING, 
-	OUT lower_preimage CHARACTER VARYING,
-	OUT upper_preimage CHARACTER VARYING, 
-	OUT upper_topology CHARACTER VARYING,
-	OUT interval_image TIMESTAMP
+	_measure varchar_timestamp[]
+)
+RETURNS TABLE
+( 
+	lower_topology CHARACTER VARYING, 
+	lower_preimage CHARACTER VARYING,
+	upper_preimage CHARACTER VARYING, 
+	upper_topology CHARACTER VARYING,
+	interval_image TIMESTAMP
 ) 
-RETURNS SETOF RECORD LANGUAGE sql IMMUTABLE AS
+LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type 
@@ -215,14 +231,17 @@ $body$;
 
 CREATE OR REPLACE FUNCTION map
 (
-	_measure varchar_interval[], 
-	OUT lower_topology CHARACTER VARYING, 
-	OUT lower_preimage CHARACTER VARYING,
-	OUT upper_preimage CHARACTER VARYING, 
-	OUT upper_topology CHARACTER VARYING,
-	OUT interval_image INTERVAL
+	_measure varchar_interval[]
+)
+RETURNS TABLE
+( 
+	lower_topology CHARACTER VARYING, 
+	lower_preimage CHARACTER VARYING,
+	upper_preimage CHARACTER VARYING, 
+	upper_topology CHARACTER VARYING,
+	interval_image INTERVAL
 ) 
-RETURNS SETOF RECORD LANGUAGE sql IMMUTABLE AS
+LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type 
@@ -242,14 +261,17 @@ $body$;
 
 CREATE OR REPLACE FUNCTION map
 (
-	_measure timestamp_numeric[], 
-	OUT lower_topology CHARACTER VARYING, 
-	OUT lower_preimage TIMESTAMP,
-	OUT upper_preimage TIMESTAMP, 
-	OUT upper_topology CHARACTER VARYING,
-	OUT interval_image NUMERIC
+	_measure timestamp_numeric[]
+)
+RETURNS TABLE
+( 
+	lower_topology CHARACTER VARYING, 
+	lower_preimage TIMESTAMP,
+	upper_preimage TIMESTAMP, 
+	upper_topology CHARACTER VARYING,
+	interval_image NUMERIC
 ) 
-RETURNS SETOF RECORD LANGUAGE sql IMMUTABLE AS
+LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type 
@@ -265,14 +287,17 @@ $body$;
 
 CREATE OR REPLACE FUNCTION map
 (
-	_measure timestamp_varchar[], 
-	OUT lower_topology CHARACTER VARYING, 
-	OUT lower_preimage TIMESTAMP,
-	OUT upper_preimage TIMESTAMP, 
-	OUT upper_topology CHARACTER VARYING,
-	OUT interval_image CHARACTER VARYING
+	_measure timestamp_varchar[]
+)
+RETURNS TABLE
+( 
+	lower_topology CHARACTER VARYING, 
+	lower_preimage TIMESTAMP,
+	upper_preimage TIMESTAMP, 
+	upper_topology CHARACTER VARYING,
+	interval_image CHARACTER VARYING
 ) 
-RETURNS SETOF RECORD LANGUAGE sql IMMUTABLE AS
+LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type 
@@ -288,14 +313,17 @@ $body$;
 
 CREATE OR REPLACE FUNCTION map
 (
-	_measure timestamp_timestamp[], 
-	OUT lower_topology CHARACTER VARYING, 
-	OUT lower_preimage TIMESTAMP,
-	OUT upper_preimage TIMESTAMP, 
-	OUT upper_topology CHARACTER VARYING,
-	OUT interval_image TIMESTAMP
+	_measure timestamp_timestamp[]
+)
+RETURNS TABLE
+( 
+	lower_topology CHARACTER VARYING, 
+	lower_preimage TIMESTAMP,
+	upper_preimage TIMESTAMP, 
+	upper_topology CHARACTER VARYING,
+	interval_image TIMESTAMP
 ) 
-RETURNS SETOF RECORD LANGUAGE sql IMMUTABLE AS
+LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type 
@@ -311,14 +339,17 @@ $body$;
 
 CREATE OR REPLACE FUNCTION map
 (
-	_measure timestamp_interval[], 
-	OUT lower_topology CHARACTER VARYING, 
-	OUT lower_preimage TIMESTAMP,
-	OUT upper_preimage TIMESTAMP, 
-	OUT upper_topology CHARACTER VARYING,
-	OUT interval_image INTERVAL
+	_measure timestamp_interval[]
+)
+RETURNS TABLE
+( 
+	lower_topology CHARACTER VARYING, 
+	lower_preimage TIMESTAMP,
+	upper_preimage TIMESTAMP, 
+	upper_topology CHARACTER VARYING,
+	interval_image INTERVAL
 ) 
-RETURNS SETOF RECORD LANGUAGE sql IMMUTABLE AS
+LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type 
@@ -338,14 +369,17 @@ $body$;
 
 CREATE OR REPLACE FUNCTION map
 (
-	_measure interval_numeric[], 
-	OUT lower_topology CHARACTER VARYING, 
-	OUT lower_preimage INTERVAL,
-	OUT upper_preimage INTERVAL, 
-	OUT upper_topology CHARACTER VARYING,
-	OUT interval_image NUMERIC
+	_measure interval_numeric[]
+)
+RETURNS TABLE
+( 
+	lower_topology CHARACTER VARYING, 
+	lower_preimage INTERVAL,
+	upper_preimage INTERVAL, 
+	upper_topology CHARACTER VARYING,
+	interval_image NUMERIC
 ) 
-RETURNS SETOF RECORD LANGUAGE sql IMMUTABLE AS
+LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type 
@@ -361,14 +395,17 @@ $body$;
 
 CREATE OR REPLACE FUNCTION map
 (
-	_measure interval_varchar[], 
-	OUT lower_topology CHARACTER VARYING, 
-	OUT lower_preimage INTERVAL,
-	OUT upper_preimage INTERVAL, 
-	OUT upper_topology CHARACTER VARYING,
-	OUT interval_image CHARACTER VARYING
+	_measure interval_varchar[]
+)
+RETURNS TABLE
+( 
+	lower_topology CHARACTER VARYING, 
+	lower_preimage INTERVAL,
+	upper_preimage INTERVAL, 
+	upper_topology CHARACTER VARYING,
+	interval_image CHARACTER VARYING
 ) 
-RETURNS SETOF RECORD LANGUAGE sql IMMUTABLE AS
+LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type 
@@ -384,14 +421,17 @@ $body$;
 
 CREATE OR REPLACE FUNCTION map
 (
-	_measure interval_timestamp[], 
-	OUT lower_topology CHARACTER VARYING, 
-	OUT lower_preimage INTERVAL,
-	OUT upper_preimage INTERVAL, 
-	OUT upper_topology CHARACTER VARYING,
-	OUT interval_image TIMESTAMP
+	_measure interval_timestamp[]
+)
+RETURNS TABLE
+( 
+	lower_topology CHARACTER VARYING, 
+	lower_preimage INTERVAL,
+	upper_preimage INTERVAL, 
+	upper_topology CHARACTER VARYING,
+	interval_image TIMESTAMP
 ) 
-RETURNS SETOF RECORD LANGUAGE sql IMMUTABLE AS
+LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type 
@@ -407,14 +447,17 @@ $body$;
 
 CREATE OR REPLACE FUNCTION map
 (
-	_measure interval_interval[], 
-	OUT lower_topology CHARACTER VARYING, 
-	OUT lower_preimage INTERVAL,
-	OUT upper_preimage INTERVAL, 
-	OUT upper_topology CHARACTER VARYING,
-	OUT interval_image INTERVAL
+	_measure interval_interval[]
+)
+RETURNS TABLE
+( 
+	lower_topology CHARACTER VARYING, 
+	lower_preimage INTERVAL,
+	upper_preimage INTERVAL, 
+	upper_topology CHARACTER VARYING,
+	interval_image INTERVAL
 ) 
-RETURNS SETOF RECORD LANGUAGE sql IMMUTABLE AS
+LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type 

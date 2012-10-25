@@ -4,18 +4,21 @@
 
 CREATE OR REPLACE FUNCTION _indicator
 (
-	IN _lower_topology CHARACTER VARYING, 
-	IN _lower_preimage anyelement, 
-	IN _upper_preimage anyelement, 
-	IN _upper_topology CHARACTER VARYING,
-	OUT _key_infinite BOOLEAN,
-	OUT _key_finite BOOLEAN,
-	OUT _key_preimage anyelement,
-	OUT _key_topology BOOLEAN,
-	OUT _key_operation BOOLEAN,
-	OUT _value_image NUMERIC
+	_lower_topology CHARACTER VARYING, 
+	_lower_preimage anyelement, 
+	_upper_preimage anyelement, 
+	_upper_topology CHARACTER VARYING
 ) 
-RETURNS SETOF RECORD LANGUAGE sql IMMUTABLE AS
+RETURNS TABLE
+(
+	_key_infinite BOOLEAN,
+	_key_finite BOOLEAN,
+	_key_preimage anyelement,
+	_key_topology BOOLEAN,
+	_key_operation BOOLEAN,
+	_value_image NUMERIC
+) 
+LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Generic Polymorphic Interval Indicator Constructor
