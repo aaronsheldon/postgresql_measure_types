@@ -38,108 +38,126 @@ $body$
 				a0._key_index ASC NULLS FIRST			
 		),
 
-		-- Find the sum at each boundary, pushing adds to the sum, popping subtracts from the sum
+		-- Calculated the image at the boundary, asserting popped equals previous pushed
 		compute_data AS
 		(
 			SELECT
 				a0._key_index,
-				($1[a0._key_index])._key_operation,
-				sum
-				(
-					CASE 
-						WHEN ($1[a0._key_index])._key_operation AND ($1[a0._key_index])._value_image IS NOT NULL THEN 
-							1 
-						WHEN ($1[a0._key_index])._value_image IS NOT NULL THEN 
-							- 1 
-						ELSE 
-							0
-					END
-				) OVER accumulate_frame _value_zeroth,
-				sum
-				(
-					CASE 
-						WHEN ($1[a0._key_index])._key_operation THEN 
-							($1[a0._key_index])._value_image 
-						ELSE 
-							- ($1[a0._key_index])._value_image 
-					END
-				) OVER accumulate_frame _value_first,
-				sum
-				(
-					CASE 
-						WHEN ($1[a0._key_index])._key_operation THEN 
-							($1[a0._key_index])._value_image * ($1[a0._key_index])._value_image
-						ELSE 
-							- ($1[a0._key_index])._value_image * ($1[a0._key_index])._value_image
-					END
-				) OVER accumulate_frame _value_second
+				CASE
+					WHEN ($1[a0._key_index])._key_operation THEN
+						($1[a0._key_index])._key_operation = lead(($1[a0._key_index])._key_operation, 1) OVER ()
+					ELSE
+						($1[a0._key_index])._key_operation = lag(($1[a0._key_index])._key_operation, 1) OVER ()
+				END _key_degenerate,
+				CASE
+					WHEN ($1[a0._key_index])._key_operation THEN
+						sum
+						(
+							CASE 
+								WHEN ($1[a0._key_index])._key_operation AND ($1[a0._key_index])._value_image IS NOT NULL THEN 
+									1 
+								WHEN ($1[a0._key_index])._value_image IS NOT NULL THEN 
+									- 1 
+								ELSE 
+									0
+							END
+						) OVER push_frame
+					ELSE
+						sum
+						(
+							CASE 
+								WHEN ($1[a0._key_index])._key_operation AND ($1[a0._key_index])._value_image IS NOT NULL THEN 
+									1 
+								WHEN ($1[a0._key_index])._value_image IS NOT NULL THEN 
+									- 1 
+								ELSE 
+									0
+							END
+						) OVER pop_frame
+				END _value_zeroth,
+				CASE
+					WHEN ($1[a0._key_index])._key_operation THEN
+						sum
+						(
+							CASE 
+								WHEN ($1[a0._key_index])._key_operation AND ($1[a0._key_index])._value_image IS NOT NULL THEN 
+									($1[a0._key_index])._value_image 
+								WHEN ($1[a0._key_index])._value_image IS NOT NULL THEN 
+									- ($1[a0._key_index])._value_image 
+								ELSE 
+									0
+							END
+						) OVER push_frame
+					ELSE
+						sum
+						(
+							CASE 
+								WHEN ($1[a0._key_index])._key_operation AND ($1[a0._key_index])._value_image IS NOT NULL THEN 
+									($1[a0._key_index])._value_image 
+								WHEN ($1[a0._key_index])._value_image IS NOT NULL THEN 
+									- ($1[a0._key_index])._value_image 
+								ELSE 
+									0
+							END
+						) OVER pop_frame
+				END _value_first,
+				CASE
+					WHEN ($1[a0._key_index])._key_operation THEN
+						sum
+						(
+							CASE 
+								WHEN ($1[a0._key_index])._key_operation AND ($1[a0._key_index])._value_image IS NOT NULL THEN 
+									($1[a0._key_index])._value_image * ($1[a0._key_index])._value_image 
+								WHEN ($1[a0._key_index])._value_image IS NOT NULL THEN 
+									- ($1[a0._key_index])._value_image * ($1[a0._key_index])._value_image 
+								ELSE 
+									0
+							END
+						) OVER push_frame
+					ELSE
+						sum
+						(
+							CASE 
+								WHEN ($1[a0._key_index])._key_operation AND ($1[a0._key_index])._value_image IS NOT NULL THEN 
+									($1[a0._key_index])._value_image * ($1[a0._key_index])._value_image 
+								WHEN ($1[a0._key_index])._value_image IS NOT NULL THEN 
+									- ($1[a0._key_index])._value_image * ($1[a0._key_index])._value_image 
+								ELSE 
+									0
+							END
+						) OVER pop_frame
+				END _value_second
 			FROM
 				sort_data a0
 			WINDOW
-				accumulate_frame AS (ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)
+				push_frame AS (ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW),
+				pop_frame AS (ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING)
 		),	
 
-		-- Flag degenerate boundaries, and assert popped equals pushed
-		degenerate_data AS
-		(
-			SELECT
-				a0._key_index,
-				a0._key_operation,
-				CASE
-					WHEN a0._key_operation THEN
-						a0._key_operation = lead(a0._key_operation, 1) OVER lead_frame
-					ELSE
-						a0._key_operation = lag(a0._key_operation, 1) OVER lag_frame
-				END _key_degenerate,
-				CASE
-					WHEN a0._key_operation THEN
-						a0._value_zeroth
-					ELSE
-						lag(a0._value_zeroth, 1) OVER lag_frame
-				END _value_zeroth,
-				CASE
-					WHEN a0._key_operation THEN
-						a0._value_first
-					ELSE
-						lag(a0._value_first, 1) OVER lag_frame
-				END _value_first,
-				CASE
-					WHEN a0._key_operation THEN
-						a0._value_second
-					ELSE
-						lag(a0._value_second, 1) OVER lag_frame
-				END _value_second
-			FROM
-				compute_data a0
-			WINDOW
-				lag_frame AS (ROWS BETWEEN 1 PRECEDING AND CURRENT ROW),
-				lead_frame AS (ROWS BETWEEN CURRENT ROW AND 1 FOLLOWING)
-		),
-
-		-- Flag redundant boundaries, where the image is the same on either side
-		redundant_data AS
+		-- Prune degenerate boundaries, and flag redundant boundaries
+		sieve_data AS
 		(
 			SELECT
 				a0._key_index,
 				CASE
-					WHEN a0._key_operation THEN
-						COALESCE(a0._value_zeroth = lag(a0._value_zeroth, 1) OVER lag_frame, a0._value_zeroth IS NULL AND lag(a0._value_zeroth, 1) OVER lag_frame IS NULL)
+					WHEN ($1[a0._key_index])._key_operation THEN
+						COALESCE(a0._value_zeroth = lag(a0._value_zeroth, 1) OVER (), a0._value_zeroth IS NULL AND lag(a0._value_zeroth, 1) OVER () IS NULL)
  					ELSE
-						COALESCE(a0._value_zeroth = lead(a0._value_zeroth, 1) OVER lead_frame, a0._value_zeroth IS NULL AND lead(a0._value_zeroth, 1) OVER lead_frame IS NULL)
+						COALESCE(a0._value_zeroth = lead(a0._value_zeroth, 1) OVER (), a0._value_zeroth IS NULL AND lead(a0._value_zeroth, 1) OVER () IS NULL)
 				END
 				AND
 				CASE
-					WHEN a0._key_operation THEN
-						COALESCE(a0._value_first = lag(a0._value_first, 1) OVER lag_frame, a0._value_first IS NULL AND lag(a0._value_first, 1) OVER lag_frame IS NULL)
+					WHEN ($1[a0._key_index])._key_operation THEN
+						COALESCE(a0._value_first = lag(a0._value_first, 1) OVER (), a0._value_first IS NULL AND lag(a0._value_first, 1) OVER () IS NULL)
  					ELSE
-						COALESCE(a0._value_first = lead(a0._value_first, 1) OVER lead_frame, a0._value_first IS NULL AND lead(a0._value_first, 1) OVER lead_frame IS NULL)
+						COALESCE(a0._value_first = lead(a0._value_first, 1) OVER (), a0._value_first IS NULL AND lead(a0._value_first, 1) OVER () IS NULL)
 				END
 				AND
 				CASE
-					WHEN a0._key_operation THEN
-						COALESCE(a0._value_second = lag(a0._value_second, 1) OVER lag_frame, a0._value_second IS NULL AND lag(a0._value_second, 1) OVER lag_frame IS NULL)
+					WHEN ($1[a0._key_index])._key_operation THEN
+						COALESCE(a0._value_second = lag(a0._value_second, 1) OVER (), a0._value_second IS NULL AND lag(a0._value_second, 1) OVER () IS NULL)
  					ELSE
-						COALESCE(a0._value_second = lead(a0._value_second, 1) OVER lead_frame, a0._value_second IS NULL AND lead(a0._value_second, 1) OVER lead_frame IS NULL)
+						COALESCE(a0._value_second = lead(a0._value_second, 1) OVER (), a0._value_second IS NULL AND lead(a0._value_second, 1) OVER () IS NULL)
 				END
 				AND
 				($1[a0._key_index])._key_finite _key_redundant,
@@ -151,21 +169,18 @@ $body$
 						NULL
 				END _value_first,
 				CASE
-					WHEN a0._value_second > 0 THEN
+					WHEN a0._value_zeroth > 0 THEN
 						a0._value_second
 					ELSE
 						NULL
 				END _value_second
 			FROM
-				degenerate_data a0
+				compute_data a0
 			WHERE
 				NOT a0._key_degenerate
-			WINDOW
-				lag_frame AS (ROWS BETWEEN 1 PRECEDING AND CURRENT ROW),
-				lead_frame AS (ROWS BETWEEN CURRENT ROW AND 1 FOLLOWING)
-		)
+		)	
 
-	-- Return generic records of distinct non-degenerate/redundant boundaries
+	-- Return generic records of distinct boundaries
 	SELECT
 		($1[a0._key_index])._key_infinite,
 		($1[a0._key_index])._key_finite,
@@ -176,7 +191,7 @@ $body$
 		a0._value_first,
 		a0._value_second
 	FROM
-		redundant_data a0
+		sieve_data a0
 	WHERE
 		NOT a0._key_redundant;
 $body$
