@@ -182,12 +182,12 @@ $body$
 
 	-- Return generic records of distinct boundaries
 	SELECT
-		($1[a0._key_index])._key_infinite,
-		($1[a0._key_index])._key_finite,
+		($1[a0._key_index])._key_infinite::BOOLEAN,
+		($1[a0._key_index])._key_finite::BOOLEAN,
 		($1[a0._key_index])._key_preimage,
-		($1[a0._key_index])._key_topology,
-		($1[a0._key_index])._key_operation,
-		a0._value_zeroth,
+		($1[a0._key_index])._key_topology::BOOLEAN,
+		($1[a0._key_index])._key_operation::BOOLEAN,
+		a0._value_zeroth::BIGINT,
 		a0._value_first,
 		a0._value_second
 	FROM

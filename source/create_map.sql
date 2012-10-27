@@ -2,7 +2,7 @@
 -- Generic measure spaces --
 ----------------------------
 
-CREATE OR REPLACE FUNCTION _map (_measure anyarray) RETURNS SETOF RECORD LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _map(_measure anyarray) RETURNS SETOF RECORD LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Inverse Constructor to the Measure and Indicator Constructors
@@ -44,11 +44,7 @@ $body$;
 -- Decimal measure spaces --
 ----------------------------
 
-CREATE OR REPLACE FUNCTION map
-(
-	_measure numeric_numeric[]
-)
-RETURNS TABLE
+CREATE OR REPLACE FUNCTION map(_measure numeric_numeric[]) RETURNS TABLE
 (
 	lower_preimage NUMERIC,
 	upper_preimage NUMERIC, 
@@ -69,11 +65,7 @@ $body$
 	SELECT _map($1) _return;
 $body$;
 
-CREATE OR REPLACE FUNCTION map
-(
-	_measure numeric_varchar[]
-)
-RETURNS TABLE
+CREATE OR REPLACE FUNCTION map(_measure numeric_varchar[]) RETURNS TABLE
 ( 
 	lower_topology CHARACTER VARYING, 
 	lower_preimage NUMERIC,
@@ -95,11 +87,7 @@ $body$
 	SELECT _map($1) _return;
 $body$;
 
-CREATE OR REPLACE FUNCTION map
-(
-	_measure numeric_timestamp[]
-)
-RETURNS TABLE
+CREATE OR REPLACE FUNCTION map(_measure numeric_timestamp[]) RETURNS TABLE
 ( 
 	lower_topology CHARACTER VARYING, 
 	lower_preimage NUMERIC,
@@ -121,11 +109,7 @@ $body$
 	SELECT _map($1) _return;
 $body$;
 
-CREATE OR REPLACE FUNCTION map
-(
-	_measure numeric_interval[]
-)
-RETURNS TABLE
+CREATE OR REPLACE FUNCTION map(_measure numeric_interval[]) RETURNS TABLE
 ( 
 	lower_topology CHARACTER VARYING, 
 	lower_preimage NUMERIC,
@@ -151,11 +135,7 @@ $body$;
 -- Sting measure spaces --
 --------------------------
 
-CREATE OR REPLACE FUNCTION map
-(
-	_measure varchar_numeric[]
-)
-RETURNS TABLE
+CREATE OR REPLACE FUNCTION map(_measure varchar_numeric[]) RETURNS TABLE
 ( 
 	lower_topology CHARACTER VARYING, 
 	lower_preimage CHARACTER VARYING,
@@ -177,11 +157,7 @@ $body$
 	SELECT _map($1) _return;
 $body$;
 
-CREATE OR REPLACE FUNCTION map
-(
-	_measure varchar_varchar[]
-)
-RETURNS TABLE
+CREATE OR REPLACE FUNCTION map(_measure varchar_varchar[]) RETURNS TABLE
 ( 
 	lower_topology CHARACTER VARYING, 
 	lower_preimage CHARACTER VARYING,
@@ -203,11 +179,7 @@ $body$
 	SELECT _map($1) _return;
 $body$;
 
-CREATE OR REPLACE FUNCTION map
-(
-	_measure varchar_timestamp[]
-)
-RETURNS TABLE
+CREATE OR REPLACE FUNCTION map(_measure varchar_timestamp[]) RETURNS TABLE
 ( 
 	lower_topology CHARACTER VARYING, 
 	lower_preimage CHARACTER VARYING,
@@ -229,11 +201,7 @@ $body$
 	SELECT _map($1) _return;
 $body$;
 
-CREATE OR REPLACE FUNCTION map
-(
-	_measure varchar_interval[]
-)
-RETURNS TABLE
+CREATE OR REPLACE FUNCTION map(_measure varchar_interval[]) RETURNS TABLE
 ( 
 	lower_topology CHARACTER VARYING, 
 	lower_preimage CHARACTER VARYING,
@@ -259,11 +227,7 @@ $body$;
 -- Time measure spaces --
 -------------------------
 
-CREATE OR REPLACE FUNCTION map
-(
-	_measure timestamp_numeric[]
-)
-RETURNS TABLE
+CREATE OR REPLACE FUNCTION map(_measure timestamp_numeric[]) RETURNS TABLE
 ( 
 	lower_topology CHARACTER VARYING, 
 	lower_preimage TIMESTAMP,
@@ -285,11 +249,7 @@ $body$
 	SELECT _map($1) _return;
 $body$;
 
-CREATE OR REPLACE FUNCTION map
-(
-	_measure timestamp_varchar[]
-)
-RETURNS TABLE
+CREATE OR REPLACE FUNCTION map(_measure timestamp_varchar[]) RETURNS TABLE
 ( 
 	lower_topology CHARACTER VARYING, 
 	lower_preimage TIMESTAMP,
@@ -311,11 +271,7 @@ $body$
 	SELECT _map($1) _return;
 $body$;
 
-CREATE OR REPLACE FUNCTION map
-(
-	_measure timestamp_timestamp[]
-)
-RETURNS TABLE
+CREATE OR REPLACE FUNCTION map(_measure timestamp_timestamp[]) RETURNS TABLE
 ( 
 	lower_topology CHARACTER VARYING, 
 	lower_preimage TIMESTAMP,
@@ -337,11 +293,7 @@ $body$
 	SELECT _map($1) _return;
 $body$;
 
-CREATE OR REPLACE FUNCTION map
-(
-	_measure timestamp_interval[]
-)
-RETURNS TABLE
+CREATE OR REPLACE FUNCTION map(_measure timestamp_interval[]) RETURNS TABLE
 ( 
 	lower_topology CHARACTER VARYING, 
 	lower_preimage TIMESTAMP,
@@ -367,11 +319,7 @@ $body$;
 -- Interval measure spaces --
 -----------------------------
 
-CREATE OR REPLACE FUNCTION map
-(
-	_measure interval_numeric[]
-)
-RETURNS TABLE
+CREATE OR REPLACE FUNCTION map(_measure interval_numeric[]) RETURNS TABLE
 ( 
 	lower_topology CHARACTER VARYING, 
 	lower_preimage INTERVAL,
@@ -393,11 +341,7 @@ $body$
 	SELECT _map($1) _return;
 $body$;
 
-CREATE OR REPLACE FUNCTION map
-(
-	_measure interval_varchar[]
-)
-RETURNS TABLE
+CREATE OR REPLACE FUNCTION map(_measure interval_varchar[]) RETURNS TABLE
 ( 
 	lower_topology CHARACTER VARYING, 
 	lower_preimage INTERVAL,
@@ -419,11 +363,7 @@ $body$
 	SELECT _map($1) _return;
 $body$;
 
-CREATE OR REPLACE FUNCTION map
-(
-	_measure interval_timestamp[]
-)
-RETURNS TABLE
+CREATE OR REPLACE FUNCTION map(_measure interval_timestamp[]) RETURNS TABLE
 ( 
 	lower_topology CHARACTER VARYING, 
 	lower_preimage INTERVAL,
@@ -445,11 +385,7 @@ $body$
 	SELECT _map($1) _return;
 $body$;
 
-CREATE OR REPLACE FUNCTION map
-(
-	_measure interval_interval[]
-)
-RETURNS TABLE
+CREATE OR REPLACE FUNCTION map(_measure interval_interval[]) RETURNS TABLE
 ( 
 	lower_topology CHARACTER VARYING, 
 	lower_preimage INTERVAL,
