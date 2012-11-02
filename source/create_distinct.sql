@@ -43,21 +43,22 @@ $body$
 		a0._key_index,
 		CASE
 			WHEN ($1[a0._key_index])._key_infinite THEN
-				0 = COALESCE(SUM(CASE WHEN ($1[a0._key_index])._key_operation THEN 1 ELSE -1 END) OVER pop_frame, 0)
+				COALESCE(lead(FALSE, 1) OVER image_frame, TRUE)
 			WHEN NOT ($1[a0._key_index])._key_finite THEN
-				0 = COALESCE(SUM(CASE WHEN ($1[a0._key_index])._key_operation THEN 1 ELSE -1 END) OVER push_frame, 0)
+				COALESCE(lag(FALSE, 1) OVER image_frame, TRUE)
 			WHEN ($1[a0._key_index])._key_operation THEN
 				0 = COALESCE(SUM(CASE WHEN ($1[a0._key_index])._key_operation THEN 1 ELSE -1 END) OVER push_frame, 0)
 				AND
-				($1[a0._key_index])._key_preimage > lag(($1[a0._key_index])._key_preimage, 1) OVER ()
+				($1[a0._key_index])._key_preimage > lag(($1[a0._key_index])._key_preimage, 1) OVER image_frame
 			ELSE
 				0 = COALESCE(SUM(CASE WHEN ($1[a0._key_index])._key_operation THEN 1 ELSE -1 END) OVER pop_frame, 0)
 				AND
-				($1[a0._key_index])._key_preimage < lead(($1[a0._key_index])._key_preimage, 1) OVER ()
+				($1[a0._key_index])._key_preimage < lead(($1[a0._key_index])._key_preimage, 1) OVER image_frame
 		END _key_distinct
 	FROM
 		sort_data a0
 	WINDOW
 		push_frame AS (PARTITION BY ($1[a0._key_index])._value_image ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING),
-		pop_frame AS (PARTITION BY ($1[a0._key_index])._value_image ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW);
+		pop_frame AS (PARTITION BY ($1[a0._key_index])._value_image ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW),
+		image_frame AS (PARTITION BY ($1[a0._key_index])._value_image);
 $body$;
