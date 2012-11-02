@@ -104,12 +104,12 @@ $body$
 
 	-- Return generic records of distinct boundaries
 	SELECT
-		($1[a0._key_index])._key_infinite,
-		($1[a0._key_index])._key_finite,
+		($1[a0._key_index])._key_infinite::BOOLEAN,
+		($1[a0._key_index])._key_finite::BOOLEAN,
 		($1[a0._key_index])._key_preimage,
-		($1[a0._key_index])._key_topology,
-		($1[a0._key_index])._key_operation,
-		a0._value_image
+		($1[a0._key_index])._key_topology::BOOLEAN,
+		($1[a0._key_index])._key_operation::BOOLEAN,
+		a0._value_image::BIGINT
 	FROM
 		sieve_data a0
 	WHERE
@@ -141,11 +141,11 @@ $body$
 			_key_preimage NUMERIC, 
 			_key_topology BOOLEAN,
 			_key_operation BOOLEAN, 
-			_value_image NUMERIC
+			_value_image BIGINT
 		)
 $body$;
 
-CREATE OR REPLACE FUNCTION _count(_measure numeric_interval[]) RETURNS numeric_interval[] LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _count(_measure numeric_varchar[]) RETURNS numeric_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type 
@@ -153,11 +153,11 @@ $body$
  * Assert input type matches output type when calling generic count function
  *
  * @author Aaron Sheldon
- * @param numeric_interval Stack of simple measurable functions
- * @return numeric_interval Simple measurable function
+ * @param numeric_varchar Stack of simple measurable functions
+ * @return numeric_numeric Simple measurable function
  */
 	SELECT
-		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._value_image)::numeric_interval) _return
+		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._value_image)::numeric_numeric) _return
 	FROM
 		_count_implement($1) a0
 		(
@@ -166,7 +166,57 @@ $body$
 			_key_preimage NUMERIC, 
 			_key_topology BOOLEAN,
 			_key_operation BOOLEAN, 
-			_value_image INTERVAL
+			_value_image BIGINT
+		)
+$body$;
+
+CREATE OR REPLACE FUNCTION _count(_measure numeric_timestamp[]) RETURNS numeric_numeric[] LANGUAGE sql IMMUTABLE AS
+$body$
+/*
+ * Wrapper function to coerce type 
+ *
+ * Assert input type matches output type when calling generic count function
+ *
+ * @author Aaron Sheldon
+ * @param numeric_timestamp Stack of simple measurable functions
+ * @return numeric_numeric Simple measurable function
+ */
+	SELECT
+		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._value_image)::numeric_numeric) _return
+	FROM
+		_count_implement($1) a0
+		(
+			_key_infinite BOOLEAN, 
+			_key_finite BOOLEAN, 
+			_key_preimage NUMERIC, 
+			_key_topology BOOLEAN,
+			_key_operation BOOLEAN, 
+			_value_image BIGINT
+		)
+$body$;
+
+CREATE OR REPLACE FUNCTION _count(_measure numeric_interval[]) RETURNS numeric_numeric[] LANGUAGE sql IMMUTABLE AS
+$body$
+/*
+ * Wrapper function to coerce type 
+ *
+ * Assert input type matches output type when calling generic count function
+ *
+ * @author Aaron Sheldon
+ * @param numeric_interval Stack of simple measurable functions
+ * @return numeric_numeric Simple measurable function
+ */
+	SELECT
+		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._value_image)::numeric_numeric) _return
+	FROM
+		_count_implement($1) a0
+		(
+			_key_infinite BOOLEAN, 
+			_key_finite BOOLEAN, 
+			_key_preimage NUMERIC, 
+			_key_topology BOOLEAN,
+			_key_operation BOOLEAN, 
+			_value_image BIGINT
 		)
 $body$;
 
@@ -195,11 +245,11 @@ $body$
 			_key_preimage CHARACTER VARYING, 
 			_key_topology BOOLEAN,
 			_key_operation BOOLEAN, 
-			_value_image NUMERIC
+			_value_image BIGINT
 		)
 $body$;
 
-CREATE OR REPLACE FUNCTION _count(_measure varchar_interval[]) RETURNS varchar_interval[] LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _count(_measure varchar_varchar[]) RETURNS varchar_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type 
@@ -207,11 +257,11 @@ $body$
  * Assert input type matches output type when calling generic count function
  *
  * @author Aaron Sheldon
- * @param varchar_interval Stack of simple measurable functions
- * @return varchar_interval Simple measurable function
+ * @param varchar_varchar Stack of simple measurable functions
+ * @return varchar_numeric Simple measurable function
  */
 	SELECT
-		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._value_image)::varchar_interval) _return
+		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._value_image)::varchar_numeric) _return
 	FROM
 		_count_implement($1) a0
 		(
@@ -220,7 +270,57 @@ $body$
 			_key_preimage CHARACTER VARYING, 
 			_key_topology BOOLEAN,
 			_key_operation BOOLEAN, 
-			_value_image INTERVAL
+			_value_image BIGINT
+		)
+$body$;
+
+CREATE OR REPLACE FUNCTION _count(_measure varchar_timestamp[]) RETURNS varchar_numeric[] LANGUAGE sql IMMUTABLE AS
+$body$
+/*
+ * Wrapper function to coerce type 
+ *
+ * Assert input type matches output type when calling generic count function
+ *
+ * @author Aaron Sheldon
+ * @param varchar_timestamp Stack of simple measurable functions
+ * @return varchar_numeric Simple measurable function
+ */
+	SELECT
+		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._value_image)::varchar_numeric) _return
+	FROM
+		_count_implement($1) a0
+		(
+			_key_infinite BOOLEAN, 
+			_key_finite BOOLEAN, 
+			_key_preimage CHARACTER VARYING, 
+			_key_topology BOOLEAN,
+			_key_operation BOOLEAN, 
+			_value_image BIGINT
+		)
+$body$;
+
+CREATE OR REPLACE FUNCTION _count(_measure varchar_interval[]) RETURNS varchar_numeric[] LANGUAGE sql IMMUTABLE AS
+$body$
+/*
+ * Wrapper function to coerce type 
+ *
+ * Assert input type matches output type when calling generic count function
+ *
+ * @author Aaron Sheldon
+ * @param varchar_interval Stack of simple measurable functions
+ * @return varchar_numeric Simple measurable function
+ */
+	SELECT
+		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._value_image)::varchar_numeric) _return
+	FROM
+		_count_implement($1) a0
+		(
+			_key_infinite BOOLEAN, 
+			_key_finite BOOLEAN, 
+			_key_preimage CHARACTER VARYING, 
+			_key_topology BOOLEAN,
+			_key_operation BOOLEAN, 
+			_value_image BIGINT
 		)
 $body$;
 
@@ -249,11 +349,11 @@ $body$
 			_key_preimage TIMESTAMP, 
 			_key_topology BOOLEAN,
 			_key_operation BOOLEAN, 
-			_value_image NUMERIC
+			_value_image BIGINT
 		)
 $body$;
 
-CREATE OR REPLACE FUNCTION _count(_measure timestamp_interval[]) RETURNS timestamp_interval[] LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _count(_measure timestamp_varchar[]) RETURNS timestamp_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type 
@@ -261,11 +361,11 @@ $body$
  * Assert input type matches output type when calling generic count function
  *
  * @author Aaron Sheldon
- * @param timestamp_interval Stack of simple measurable functions
- * @return timestamp_interval Simple measurable function
+ * @param timestamp_varchar Stack of simple measurable functions
+ * @return timestamp_numeric Simple measurable function
  */
 	SELECT
-		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._value_image)::timestamp_interval) _return
+		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._value_image)::timestamp_numeric) _return
 	FROM
 		_count_implement($1) a0
 		(
@@ -274,7 +374,57 @@ $body$
 			_key_preimage TIMESTAMP, 
 			_key_topology BOOLEAN,
 			_key_operation BOOLEAN, 
-			_value_image INTERVAL
+			_value_image BIGINT
+		)
+$body$;
+
+CREATE OR REPLACE FUNCTION _count(_measure timestamp_timestamp[]) RETURNS timestamp_numeric[] LANGUAGE sql IMMUTABLE AS
+$body$
+/*
+ * Wrapper function to coerce type 
+ *
+ * Assert input type matches output type when calling generic count function
+ *
+ * @author Aaron Sheldon
+ * @param timestamp_timestamp Stack of simple measurable functions
+ * @return timestamp_numeric Simple measurable function
+ */
+	SELECT
+		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._value_image)::timestamp_numeric) _return
+	FROM
+		_count_implement($1) a0
+		(
+			_key_infinite BOOLEAN, 
+			_key_finite BOOLEAN, 
+			_key_preimage TIMESTAMP, 
+			_key_topology BOOLEAN,
+			_key_operation BOOLEAN, 
+			_value_image BIGINT
+		)
+$body$;
+
+CREATE OR REPLACE FUNCTION _count(_measure timestamp_interval[]) RETURNS timestamp_numeric[] LANGUAGE sql IMMUTABLE AS
+$body$
+/*
+ * Wrapper function to coerce type 
+ *
+ * Assert input type matches output type when calling generic count function
+ *
+ * @author Aaron Sheldon
+ * @param timestamp_interval Stack of simple measurable functions
+ * @return timestamp_numeric Simple measurable function
+ */
+	SELECT
+		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._value_image)::timestamp_numeric) _return
+	FROM
+		_count_implement($1) a0
+		(
+			_key_infinite BOOLEAN, 
+			_key_finite BOOLEAN, 
+			_key_preimage TIMESTAMP, 
+			_key_topology BOOLEAN,
+			_key_operation BOOLEAN, 
+			_value_image BIGINT
 		)
 $body$;
 
@@ -303,11 +453,11 @@ $body$
 			_key_preimage INTERVAL, 
 			_key_topology BOOLEAN,
 			_key_operation BOOLEAN, 
-			_value_image NUMERIC
+			_value_image BIGINT
 		)
 $body$;
 
-CREATE OR REPLACE FUNCTION _count(_measure interval_interval[]) RETURNS interval_interval[] LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _count(_measure interval_varchar[]) RETURNS interval_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type 
@@ -315,11 +465,11 @@ $body$
  * Assert input type matches output type when calling generic count function
  *
  * @author Aaron Sheldon
- * @param interval_interval Stack of simple measurable functions
- * @return interval_interval Simple measurable function
+ * @param interval_varchar Stack of simple measurable functions
+ * @return interval_numeric Simple measurable function
  */
 	SELECT
-		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._value_image)::interval_interval) _return
+		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._value_image)::interval_numeric) _return
 	FROM
 		_count_implement($1) a0
 		(
@@ -328,6 +478,56 @@ $body$
 			_key_preimage INTERVAL, 
 			_key_topology BOOLEAN,
 			_key_operation BOOLEAN, 
-			_value_image INTERVAL
+			_value_image BIGINT
+		)
+$body$;
+
+CREATE OR REPLACE FUNCTION _count(_measure interval_timestamp[]) RETURNS interval_numeric[] LANGUAGE sql IMMUTABLE AS
+$body$
+/*
+ * Wrapper function to coerce type 
+ *
+ * Assert input type matches output type when calling generic count function
+ *
+ * @author Aaron Sheldon
+ * @param interval_timestamp Stack of simple measurable functions
+ * @return interval_numeric Simple measurable function
+ */
+	SELECT
+		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._value_image)::interval_numeric) _return
+	FROM
+		_count_implement($1) a0
+		(
+			_key_infinite BOOLEAN, 
+			_key_finite BOOLEAN, 
+			_key_preimage INTERVAL, 
+			_key_topology BOOLEAN,
+			_key_operation BOOLEAN, 
+			_value_image BIGINT
+		)
+$body$;
+
+CREATE OR REPLACE FUNCTION _count(_measure interval_interval[]) RETURNS interval_numeric[] LANGUAGE sql IMMUTABLE AS
+$body$
+/*
+ * Wrapper function to coerce type 
+ *
+ * Assert input type matches output type when calling generic count function
+ *
+ * @author Aaron Sheldon
+ * @param interval_interval Stack of simple measurable functions
+ * @return interval_numeric Simple measurable function
+ */
+	SELECT
+		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._value_image)::interval_numeric) _return
+	FROM
+		_count_implement($1) a0
+		(
+			_key_infinite BOOLEAN, 
+			_key_finite BOOLEAN, 
+			_key_preimage INTERVAL, 
+			_key_topology BOOLEAN,
+			_key_operation BOOLEAN, 
+			_value_image BIGINT
 		)
 $body$;
