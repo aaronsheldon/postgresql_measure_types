@@ -7,36 +7,19 @@ $body$
 /*
  * Pointwise Not NUll Count of Simple Measurable Functions
  *
- * Given a list of the boundaries of an arbitrary set of simple measurable functions, sort
- * the boundaries in correct topological order. Find the count on each boundary by cumulatively
- * adding 1 for every not null pushed and substracting 1 popped for every not null popped. The 
- * final value on popped boundary is the value last cumulative value last pushed, and the final 
- * value on a pushed boundary is the last value pushed. Sieve out all popped boundaries sequentially 
- * unbroken following the first popped boundary as degenerate/redundant, and all pushed boundaries 
- * sequential unbroken preceding the last pushed boundary. Sorting on the index ensures the
- * pre-aggregate ordering of the simple measurable functions is respected.
+ * Find the count on each boundary by cumulatively adding 1 for every not null pushed and 
+ * substracting 1 popped for every not null popped. The final value on popped boundary is the value
+ * last cumulative value last pushed, and the final value on a pushed boundary is the last 
+ * value pushed. Sieve out all popped boundaries sequentially unbroken following the first popped
+ * boundary as degenerate/redundant, and all pushed boundaries sequential unbroken preceding the
+ * last pushed boundary. Sorting on the index ensures the pre-aggregate ordering of the simple 
+ * measurable functions is respected.
  *
  * @author Aaron Sheldon
  * @param array Stack of simple measurable function
  * @return table Representation of a generic measurable function
  */
 	WITH
-
-		-- Sort the boundaries of the preimages
-		sort_data AS
-		(
-			SELECT 
-				a0._key_index
-			FROM
-				generate_series(1, array_length($1, 1), 1) a0(_key_index)
-			ORDER BY
-				($1[a0._key_index])._key_infinite ASC NULLS FIRST,
-				($1[a0._key_index])._key_finite ASC NULLS FIRST,
-				($1[a0._key_index])._key_preimage ASC NULLS FIRST,
-				($1[a0._key_index])._key_topology ASC NULLS FIRST,
-				($1[a0._key_index])._key_operation ASC NULLS FIRST,
-				a0._key_index ASC NULLS FIRST			
-		),
 
 		-- Calculated the image at the boundary, asserting popped equals previous pushed
 		compute_data AS
@@ -76,7 +59,7 @@ $body$
 						) OVER pop_frame
 				END _value_image
 			FROM
-				sort_data a0
+				_sort($1) a0
 			WINDOW
 				push_frame AS (ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW),
 				pop_frame AS (ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING)
