@@ -19,23 +19,44 @@ $body$
 	SELECT
 		a0._key_index::BIGINT,
 		CASE
-			WHEN ($1[a0._key_index])._key_infinite THEN
-				COALESCE(lead(FALSE, 1) OVER image_frame, TRUE)
-			WHEN NOT ($1[a0._key_index])._key_finite THEN
-				COALESCE(lag(FALSE, 1) OVER image_frame, TRUE)
 			WHEN ($1[a0._key_index])._key_operation THEN
-				0 = COALESCE(SUM(CASE WHEN ($1[a0._key_index])._key_operation THEN 1 ELSE -1 END) OVER push_frame, 0)
+				1 = SUM(CASE WHEN ($1[a0._key_index])._key_operation THEN 1 ELSE -1 END) OVER operation_frame
 				AND
-				($1[a0._key_index])._key_preimage > lag(($1[a0._key_index])._key_preimage, 1) OVER image_frame
+				(
+					COALESCE(($1[a0._key_index])._key_preimage > lag(($1[a0._key_index])._key_preimage, 1) OVER image_frame, TRUE)
+					OR
+					COALESCE(($1[a0._key_index])._key_topology > lag(($1[a0._key_index])._key_topology, 1) OVER image_frame, TRUE)
+				)
 			ELSE
-				0 = COALESCE(SUM(CASE WHEN ($1[a0._key_index])._key_operation THEN 1 ELSE -1 END) OVER pop_frame, 0)
+				0 = SUM(CASE WHEN ($1[a0._key_index])._key_operation THEN 1 ELSE -1 END) OVER operation_frame
 				AND
-				($1[a0._key_index])._key_preimage < lead(($1[a0._key_index])._key_preimage, 1) OVER image_frame
-		END::BOOLEAN _key_distinct
+				(
+					COALESCE(($1[a0._key_index])._key_preimage < lead(($1[a0._key_index])._key_preimage, 1) OVER image_frame, TRUE)
+					OR
+					COALESCE(($1[a0._key_index])._key_topology < lead(($1[a0._key_index])._key_topology, 1) OVER image_frame, TRUE)
+				)
+		END _key_distinct
 	FROM
-		_sort($1) a0
+		generate_series(1, array_length($1, 1), 1) a0(_key_index)
 	WINDOW
-		push_frame AS (PARTITION BY ($1[a0._key_index])._value_image ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING),
-		pop_frame AS (PARTITION BY ($1[a0._key_index])._value_image ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW),
-		image_frame AS (PARTITION BY ($1[a0._key_index])._value_image);
+		image_frame AS 
+		(
+			PARTITION BY 
+				($1[a0._key_index])._value_image 
+			ORDER BY
+				($1[a0._key_index])._key_infinite ASC NULLS FIRST,
+				($1[a0._key_index])._key_finite ASC NULLS FIRST,
+				($1[a0._key_index])._key_preimage ASC NULLS FIRST,
+				($1[a0._key_index])._key_topology ASC NULLS FIRST,
+				($1[a0._key_index])._key_operation ASC NULLS FIRST,
+				a0._key_index ASC NULLS FIRST
+		),
+		operation_frame AS (image_frame ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)
+	ORDER BY
+		($1[a0._key_index])._key_infinite ASC NULLS FIRST,
+		($1[a0._key_index])._key_finite ASC NULLS FIRST,
+		($1[a0._key_index])._key_preimage ASC NULLS FIRST,
+		($1[a0._key_index])._key_topology ASC NULLS FIRST,
+		($1[a0._key_index])._key_operation ASC NULLS FIRST,
+		a0._key_index ASC NULLS FIRST;
 $body$;
