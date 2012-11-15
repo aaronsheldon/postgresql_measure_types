@@ -2,7 +2,7 @@
 -- Generic measure spaces --
 ----------------------------
 
-CREATE OR REPLACE FUNCTION _count_implement(_measure anyarray) RETURNS SETOF RECORD LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _count_distinct_implement(_measure anyarray) RETURNS SETOF RECORD LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Pointwise Not NUll Count of Simple Measurable Functions
@@ -59,7 +59,7 @@ $body$
 						) OVER pop_frame
 				END _value_image
 			FROM
-				_sort($1) a0
+				_distinct($1) a0
 			WINDOW
 				push_frame AS (ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW),
 				pop_frame AS (ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING)

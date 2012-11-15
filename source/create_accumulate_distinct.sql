@@ -2,12 +2,12 @@
 -- Generic measure spaces --
 ----------------------------
 
-CREATE OR REPLACE FUNCTION _accumulate(_measure anyarray) RETURNS SETOF RECORD LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _accumulate_distinct(_measure anyarray) RETURNS SETOF RECORD LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Pointwise Zeroth, First, and Second Order Sums of Simple Measurable Functions
  *
- * Find zeroth, first, and second order sums by cumulatively pushing and popping values to 
+ * Find zeroth, first, and second order sums by cumulatively pushing and popping distinct values to 
  * the sum. The final value on popped boundary is the value last cumulative value last pushed, 
  * and the final value on a pushed boundary is the last value pushed. Sieve out all popped 
  * boundaries sequentially unbroken following the first popped boundary as degenerate/redundant, 
@@ -110,7 +110,7 @@ $body$
 						) OVER pop_frame
 				END _value_second
 			FROM
-				_sort($1) a0
+				_distinct($1) a0
 			WINDOW
 				push_frame AS (ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW),
 				pop_frame AS (ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING)
