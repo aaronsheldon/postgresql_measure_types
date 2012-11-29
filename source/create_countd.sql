@@ -2,7 +2,7 @@
 -- Generic measure spaces --
 ----------------------------
 
-CREATE OR REPLACE FUNCTION _count_distinct_implement(_measure anyarray) RETURNS SETOF RECORD LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _countd_implement(_measure anyarray) RETURNS SETOF RECORD LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Pointwise Not NUll Count of Simple Measurable Functions
@@ -37,9 +37,9 @@ $body$
 						sum
 						(
 							CASE 
-								WHEN ($1[a0._key_index])._key_operation AND ($1[a0._key_index])._value_image IS NOT NULL THEN 
+								WHEN ($1[a0._key_index])._key_operation AND ($1[a0._key_index])._value_image IS NOT NULL AND a0._key_distinct THEN 
 									1 
-								WHEN ($1[a0._key_index])._value_image IS NOT NULL THEN 
+								WHEN ($1[a0._key_index])._value_image IS NOT NULL AND a0._key_distinct THEN 
 									- 1 
 								ELSE 
 									0
@@ -49,9 +49,9 @@ $body$
 						sum
 						(
 							CASE 
-								WHEN ($1[a0._key_index])._key_operation AND ($1[a0._key_index])._value_image IS NOT NULL THEN 
+								WHEN ($1[a0._key_index])._key_operation AND ($1[a0._key_index])._value_image IS NOT NULL AND a0._key_distinct THEN 
 									1 
-								WHEN ($1[a0._key_index])._value_image IS NOT NULL THEN 
+								WHEN ($1[a0._key_index])._value_image IS NOT NULL AND a0._key_distinct THEN 
 									- 1 
 								ELSE 
 									0
@@ -59,7 +59,7 @@ $body$
 						) OVER pop_frame
 				END _value_image
 			FROM
-				_distinct($1) a0
+				_sort($1) a0
 			WINDOW
 				push_frame AS (ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW),
 				pop_frame AS (ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING)
@@ -103,7 +103,7 @@ $body$;
 -- Decimal Measure Spaces --
 ----------------------------
 
-CREATE OR REPLACE FUNCTION _count(_measure numeric_numeric[]) RETURNS numeric_numeric[] LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _countd(_measure numeric_numeric[]) RETURNS numeric_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type 
@@ -117,7 +117,7 @@ $body$
 	SELECT
 		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._value_image)::numeric_numeric) _return
 	FROM
-		_count_implement($1) a0
+		_countd_implement($1) a0
 		(
 			_key_infinite BOOLEAN, 
 			_key_finite BOOLEAN, 
@@ -128,7 +128,7 @@ $body$
 		)
 $body$;
 
-CREATE OR REPLACE FUNCTION _count(_measure numeric_varchar[]) RETURNS numeric_numeric[] LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _countd(_measure numeric_varchar[]) RETURNS numeric_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type 
@@ -142,7 +142,7 @@ $body$
 	SELECT
 		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._value_image)::numeric_numeric) _return
 	FROM
-		_count_implement($1) a0
+		_countd_implement($1) a0
 		(
 			_key_infinite BOOLEAN, 
 			_key_finite BOOLEAN, 
@@ -153,7 +153,7 @@ $body$
 		)
 $body$;
 
-CREATE OR REPLACE FUNCTION _count(_measure numeric_timestamp[]) RETURNS numeric_numeric[] LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _countd(_measure numeric_timestamp[]) RETURNS numeric_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type 
@@ -167,7 +167,7 @@ $body$
 	SELECT
 		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._value_image)::numeric_numeric) _return
 	FROM
-		_count_implement($1) a0
+		_countd_implement($1) a0
 		(
 			_key_infinite BOOLEAN, 
 			_key_finite BOOLEAN, 
@@ -178,7 +178,7 @@ $body$
 		)
 $body$;
 
-CREATE OR REPLACE FUNCTION _count(_measure numeric_interval[]) RETURNS numeric_numeric[] LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _countd(_measure numeric_interval[]) RETURNS numeric_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type 
@@ -192,7 +192,7 @@ $body$
 	SELECT
 		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._value_image)::numeric_numeric) _return
 	FROM
-		_count_implement($1) a0
+		_countd_implement($1) a0
 		(
 			_key_infinite BOOLEAN, 
 			_key_finite BOOLEAN, 
@@ -207,7 +207,7 @@ $body$;
 -- String Measure Spaces --
 ---------------------------
 
-CREATE OR REPLACE FUNCTION _count(_measure varchar_numeric[]) RETURNS varchar_numeric[] LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _countd(_measure varchar_numeric[]) RETURNS varchar_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type 
@@ -221,7 +221,7 @@ $body$
 	SELECT
 		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._value_image)::varchar_numeric) _return
 	FROM
-		_count_implement($1) a0
+		_countd_implement($1) a0
 		(
 			_key_infinite BOOLEAN, 
 			_key_finite BOOLEAN, 
@@ -232,7 +232,7 @@ $body$
 		)
 $body$;
 
-CREATE OR REPLACE FUNCTION _count(_measure varchar_varchar[]) RETURNS varchar_numeric[] LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _countd(_measure varchar_varchar[]) RETURNS varchar_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type 
@@ -246,7 +246,7 @@ $body$
 	SELECT
 		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._value_image)::varchar_numeric) _return
 	FROM
-		_count_implement($1) a0
+		_countd_implement($1) a0
 		(
 			_key_infinite BOOLEAN, 
 			_key_finite BOOLEAN, 
@@ -257,7 +257,7 @@ $body$
 		)
 $body$;
 
-CREATE OR REPLACE FUNCTION _count(_measure varchar_timestamp[]) RETURNS varchar_numeric[] LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _countd(_measure varchar_timestamp[]) RETURNS varchar_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type 
@@ -271,7 +271,7 @@ $body$
 	SELECT
 		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._value_image)::varchar_numeric) _return
 	FROM
-		_count_implement($1) a0
+		_countd_implement($1) a0
 		(
 			_key_infinite BOOLEAN, 
 			_key_finite BOOLEAN, 
@@ -282,7 +282,7 @@ $body$
 		)
 $body$;
 
-CREATE OR REPLACE FUNCTION _count(_measure varchar_interval[]) RETURNS varchar_numeric[] LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _countd(_measure varchar_interval[]) RETURNS varchar_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type 
@@ -296,7 +296,7 @@ $body$
 	SELECT
 		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._value_image)::varchar_numeric) _return
 	FROM
-		_count_implement($1) a0
+		_countd_implement($1) a0
 		(
 			_key_infinite BOOLEAN, 
 			_key_finite BOOLEAN, 
@@ -311,7 +311,7 @@ $body$;
 -- Times Measure Spaces --
 --------------------------
 
-CREATE OR REPLACE FUNCTION _count(_measure timestamp_numeric[]) RETURNS timestamp_numeric[] LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _countd(_measure timestamp_numeric[]) RETURNS timestamp_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type 
@@ -325,7 +325,7 @@ $body$
 	SELECT
 		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._value_image)::timestamp_numeric) _return
 	FROM
-		_count_implement($1) a0
+		_countd_implement($1) a0
 		(
 			_key_infinite BOOLEAN, 
 			_key_finite BOOLEAN, 
@@ -336,7 +336,7 @@ $body$
 		)
 $body$;
 
-CREATE OR REPLACE FUNCTION _count(_measure timestamp_varchar[]) RETURNS timestamp_numeric[] LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _countd(_measure timestamp_varchar[]) RETURNS timestamp_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type 
@@ -350,7 +350,7 @@ $body$
 	SELECT
 		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._value_image)::timestamp_numeric) _return
 	FROM
-		_count_implement($1) a0
+		_countd_implement($1) a0
 		(
 			_key_infinite BOOLEAN, 
 			_key_finite BOOLEAN, 
@@ -361,7 +361,7 @@ $body$
 		)
 $body$;
 
-CREATE OR REPLACE FUNCTION _count(_measure timestamp_timestamp[]) RETURNS timestamp_numeric[] LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _countd(_measure timestamp_timestamp[]) RETURNS timestamp_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type 
@@ -375,7 +375,7 @@ $body$
 	SELECT
 		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._value_image)::timestamp_numeric) _return
 	FROM
-		_count_implement($1) a0
+		_countd_implement($1) a0
 		(
 			_key_infinite BOOLEAN, 
 			_key_finite BOOLEAN, 
@@ -386,7 +386,7 @@ $body$
 		)
 $body$;
 
-CREATE OR REPLACE FUNCTION _count(_measure timestamp_interval[]) RETURNS timestamp_numeric[] LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _countd(_measure timestamp_interval[]) RETURNS timestamp_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type 
@@ -400,7 +400,7 @@ $body$
 	SELECT
 		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._value_image)::timestamp_numeric) _return
 	FROM
-		_count_implement($1) a0
+		_countd_implement($1) a0
 		(
 			_key_infinite BOOLEAN, 
 			_key_finite BOOLEAN, 
@@ -415,7 +415,7 @@ $body$;
 -- Duration Measure Spaces --
 -----------------------------
 
-CREATE OR REPLACE FUNCTION _count(_measure interval_numeric[]) RETURNS interval_numeric[] LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _countd(_measure interval_numeric[]) RETURNS interval_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type 
@@ -429,7 +429,7 @@ $body$
 	SELECT
 		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._value_image)::interval_numeric) _return
 	FROM
-		_count_implement($1) a0
+		_countd_implement($1) a0
 		(
 			_key_infinite BOOLEAN, 
 			_key_finite BOOLEAN, 
@@ -440,7 +440,7 @@ $body$
 		)
 $body$;
 
-CREATE OR REPLACE FUNCTION _count(_measure interval_varchar[]) RETURNS interval_numeric[] LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _countd(_measure interval_varchar[]) RETURNS interval_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type 
@@ -454,7 +454,7 @@ $body$
 	SELECT
 		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._value_image)::interval_numeric) _return
 	FROM
-		_count_implement($1) a0
+		_countd_implement($1) a0
 		(
 			_key_infinite BOOLEAN, 
 			_key_finite BOOLEAN, 
@@ -465,7 +465,7 @@ $body$
 		)
 $body$;
 
-CREATE OR REPLACE FUNCTION _count(_measure interval_timestamp[]) RETURNS interval_numeric[] LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _countd(_measure interval_timestamp[]) RETURNS interval_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type 
@@ -479,7 +479,7 @@ $body$
 	SELECT
 		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._value_image)::interval_numeric) _return
 	FROM
-		_count_implement($1) a0
+		_countd_implement($1) a0
 		(
 			_key_infinite BOOLEAN, 
 			_key_finite BOOLEAN, 
@@ -490,7 +490,7 @@ $body$
 		)
 $body$;
 
-CREATE OR REPLACE FUNCTION _count(_measure interval_interval[]) RETURNS interval_numeric[] LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _countd(_measure interval_interval[]) RETURNS interval_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type 
@@ -504,7 +504,7 @@ $body$
 	SELECT
 		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._value_image)::interval_numeric) _return
 	FROM
-		_count_implement($1) a0
+		_countd_implement($1) a0
 		(
 			_key_infinite BOOLEAN, 
 			_key_finite BOOLEAN, 

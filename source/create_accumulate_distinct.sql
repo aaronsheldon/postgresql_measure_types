@@ -36,9 +36,9 @@ $body$
 						sum
 						(
 							CASE 
-								WHEN ($1[a0._key_index])._key_operation AND ($1[a0._key_index])._value_image IS NOT NULL THEN 
+								WHEN ($1[a0._key_index])._key_operation AND ($1[a0._key_index])._value_image IS NOT NULL AND a0._key_distinct THEN 
 									1 
-								WHEN ($1[a0._key_index])._value_image IS NOT NULL THEN 
+								WHEN ($1[a0._key_index])._value_image IS NOT NULL AND a0._key_distinct THEN 
 									- 1 
 								ELSE 
 									0
@@ -48,9 +48,9 @@ $body$
 						sum
 						(
 							CASE 
-								WHEN ($1[a0._key_index])._key_operation AND ($1[a0._key_index])._value_image IS NOT NULL THEN 
+								WHEN ($1[a0._key_index])._key_operation AND ($1[a0._key_index])._value_image IS NOT NULL AND a0._key_distinct THEN 
 									1 
-								WHEN ($1[a0._key_index])._value_image IS NOT NULL THEN 
+								WHEN ($1[a0._key_index])._value_image IS NOT NULL AND a0._key_distinct THEN 
 									- 1 
 								ELSE 
 									0
@@ -62,9 +62,9 @@ $body$
 						sum
 						(
 							CASE 
-								WHEN ($1[a0._key_index])._key_operation AND ($1[a0._key_index])._value_image IS NOT NULL THEN 
+								WHEN ($1[a0._key_index])._key_operation AND ($1[a0._key_index])._value_image IS NOT NULL AND a0._key_distinct THEN 
 									($1[a0._key_index])._value_image 
-								WHEN ($1[a0._key_index])._value_image IS NOT NULL THEN 
+								WHEN ($1[a0._key_index])._value_image IS NOT NULL AND a0._key_distinct THEN 
 									- ($1[a0._key_index])._value_image 
 								ELSE 
 									0
@@ -74,9 +74,9 @@ $body$
 						sum
 						(
 							CASE 
-								WHEN ($1[a0._key_index])._key_operation AND ($1[a0._key_index])._value_image IS NOT NULL THEN 
+								WHEN ($1[a0._key_index])._key_operation AND ($1[a0._key_index])._value_image IS NOT NULL AND a0._key_distinct THEN 
 									($1[a0._key_index])._value_image 
-								WHEN ($1[a0._key_index])._value_image IS NOT NULL THEN 
+								WHEN ($1[a0._key_index])._value_image IS NOT NULL AND a0._key_distinct THEN 
 									- ($1[a0._key_index])._value_image 
 								ELSE 
 									0
@@ -88,9 +88,9 @@ $body$
 						sum
 						(
 							CASE 
-								WHEN ($1[a0._key_index])._key_operation AND ($1[a0._key_index])._value_image IS NOT NULL THEN 
+								WHEN ($1[a0._key_index])._key_operation AND ($1[a0._key_index])._value_image IS NOT NULL AND a0._key_distinct THEN 
 									($1[a0._key_index])._value_image * ($1[a0._key_index])._value_image 
-								WHEN ($1[a0._key_index])._value_image IS NOT NULL THEN 
+								WHEN ($1[a0._key_index])._value_image IS NOT NULL AND a0._key_distinct THEN 
 									- ($1[a0._key_index])._value_image * ($1[a0._key_index])._value_image 
 								ELSE 
 									0
@@ -100,9 +100,9 @@ $body$
 						sum
 						(
 							CASE 
-								WHEN ($1[a0._key_index])._key_operation AND ($1[a0._key_index])._value_image IS NOT NULL THEN 
+								WHEN ($1[a0._key_index])._key_operation AND ($1[a0._key_index])._value_image IS NOT NULL AND a0._key_distinct THEN 
 									($1[a0._key_index])._value_image * ($1[a0._key_index])._value_image 
-								WHEN ($1[a0._key_index])._value_image IS NOT NULL THEN 
+								WHEN ($1[a0._key_index])._value_image IS NOT NULL AND a0._key_distinct THEN 
 									- ($1[a0._key_index])._value_image * ($1[a0._key_index])._value_image 
 								ELSE 
 									0
@@ -110,7 +110,7 @@ $body$
 						) OVER pop_frame
 				END _value_second
 			FROM
-				_distinct($1) a0
+				_sort($1) a0
 			WINDOW
 				push_frame AS (ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW),
 				pop_frame AS (ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING)

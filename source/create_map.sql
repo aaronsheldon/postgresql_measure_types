@@ -45,7 +45,8 @@ $body$;
 ----------------------------
 
 CREATE OR REPLACE FUNCTION map(_measure numeric_numeric[]) RETURNS TABLE
-(
+( 
+	lower_topology CHARACTER VARYING,
 	lower_preimage NUMERIC,
 	upper_preimage NUMERIC, 
 	upper_topology CHARACTER VARYING,
