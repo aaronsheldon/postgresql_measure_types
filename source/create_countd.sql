@@ -7,12 +7,12 @@ $body$
 /*
  * Pointwise Not NUll Count of Simple Measurable Functions
  *
- * Find the count on each boundary by cumulatively adding 1 for every not null pushed and 
+ * Find the count on each boundary by cumulatively adding 1 for every not null pushed and
  * substracting 1 popped for every not null popped. The final value on popped boundary is the value
- * last cumulative value last pushed, and the final value on a pushed boundary is the last 
+ * last cumulative value last pushed, and the final value on a pushed boundary is the last
  * value pushed. Sieve out all popped boundaries sequentially unbroken following the first popped
  * boundary as degenerate/redundant, and all pushed boundaries sequential unbroken preceding the
- * last pushed boundary. Sorting on the index ensures the pre-aggregate ordering of the simple 
+ * last pushed boundary. Sorting on the index ensures the pre-aggregate ordering of the simple
  * measurable functions is respected.
  *
  * @author Aaron Sheldon
@@ -36,24 +36,24 @@ $body$
 					WHEN ($1[a0._key_index])._key_operation THEN
 						sum
 						(
-							CASE 
-								WHEN ($1[a0._key_index])._key_operation AND ($1[a0._key_index])._value_image IS NOT NULL AND a0._key_distinct THEN 
-									1 
-								WHEN ($1[a0._key_index])._value_image IS NOT NULL AND a0._key_distinct THEN 
-									- 1 
-								ELSE 
+							CASE
+								WHEN ($1[a0._key_index])._key_operation AND ($1[a0._key_index])._value_image IS NOT NULL AND a0._value_distinct THEN
+									1
+								WHEN ($1[a0._key_index])._value_image IS NOT NULL AND a0._value_distinct THEN
+									- 1
+								ELSE
 									0
 							END
 						) OVER push_frame
 					ELSE
 						sum
 						(
-							CASE 
-								WHEN ($1[a0._key_index])._key_operation AND ($1[a0._key_index])._value_image IS NOT NULL AND a0._key_distinct THEN 
-									1 
-								WHEN ($1[a0._key_index])._value_image IS NOT NULL AND a0._key_distinct THEN 
-									- 1 
-								ELSE 
+							CASE
+								WHEN ($1[a0._key_index])._key_operation AND ($1[a0._key_index])._value_image IS NOT NULL AND a0._value_distinct THEN
+									1
+								WHEN ($1[a0._key_index])._value_image IS NOT NULL AND a0._value_distinct THEN
+									- 1
+								ELSE
 									0
 							END
 						) OVER pop_frame
@@ -63,7 +63,7 @@ $body$
 			WINDOW
 				push_frame AS (ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW),
 				pop_frame AS (ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING)
-		),	
+		),
 
 		-- Prune degenerate boundaries, and flag redundant boundaries
 		sieve_data AS
@@ -75,7 +75,7 @@ $body$
 						COALESCE(a0._value_image = lag(a0._value_image, 1) OVER (), a0._value_image IS NULL AND lag(a0._value_image, 1) OVER () IS NULL)
  					ELSE
 						COALESCE(a0._value_image = lead(a0._value_image, 1) OVER (), a0._value_image IS NULL AND lead(a0._value_image, 1) OVER () IS NULL)
-				END 
+				END
 				AND
 				($1[a0._key_index])._key_finite _key_redundant,
 				a0._value_image
@@ -106,7 +106,7 @@ $body$;
 CREATE OR REPLACE FUNCTION _countd(_measure numeric_numeric[]) RETURNS numeric_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
- * Wrapper function to coerce type 
+ * Wrapper function to coerce type
  *
  * Assert input type matches output type when calling generic count function
  *
@@ -119,11 +119,11 @@ $body$
 	FROM
 		_countd_implement($1) a0
 		(
-			_key_infinite BOOLEAN, 
-			_key_finite BOOLEAN, 
-			_key_preimage NUMERIC, 
+			_key_infinite BOOLEAN,
+			_key_finite BOOLEAN,
+			_key_preimage NUMERIC,
 			_key_topology BOOLEAN,
-			_key_operation BOOLEAN, 
+			_key_operation BOOLEAN,
 			_value_image BIGINT
 		)
 $body$;
@@ -131,7 +131,7 @@ $body$;
 CREATE OR REPLACE FUNCTION _countd(_measure numeric_varchar[]) RETURNS numeric_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
- * Wrapper function to coerce type 
+ * Wrapper function to coerce type
  *
  * Assert input type matches output type when calling generic count function
  *
@@ -144,11 +144,11 @@ $body$
 	FROM
 		_countd_implement($1) a0
 		(
-			_key_infinite BOOLEAN, 
-			_key_finite BOOLEAN, 
-			_key_preimage NUMERIC, 
+			_key_infinite BOOLEAN,
+			_key_finite BOOLEAN,
+			_key_preimage NUMERIC,
 			_key_topology BOOLEAN,
-			_key_operation BOOLEAN, 
+			_key_operation BOOLEAN,
 			_value_image BIGINT
 		)
 $body$;
@@ -156,7 +156,7 @@ $body$;
 CREATE OR REPLACE FUNCTION _countd(_measure numeric_timestamp[]) RETURNS numeric_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
- * Wrapper function to coerce type 
+ * Wrapper function to coerce type
  *
  * Assert input type matches output type when calling generic count function
  *
@@ -169,11 +169,11 @@ $body$
 	FROM
 		_countd_implement($1) a0
 		(
-			_key_infinite BOOLEAN, 
-			_key_finite BOOLEAN, 
-			_key_preimage NUMERIC, 
+			_key_infinite BOOLEAN,
+			_key_finite BOOLEAN,
+			_key_preimage NUMERIC,
 			_key_topology BOOLEAN,
-			_key_operation BOOLEAN, 
+			_key_operation BOOLEAN,
 			_value_image BIGINT
 		)
 $body$;
@@ -181,7 +181,7 @@ $body$;
 CREATE OR REPLACE FUNCTION _countd(_measure numeric_interval[]) RETURNS numeric_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
- * Wrapper function to coerce type 
+ * Wrapper function to coerce type
  *
  * Assert input type matches output type when calling generic count function
  *
@@ -194,11 +194,11 @@ $body$
 	FROM
 		_countd_implement($1) a0
 		(
-			_key_infinite BOOLEAN, 
-			_key_finite BOOLEAN, 
-			_key_preimage NUMERIC, 
+			_key_infinite BOOLEAN,
+			_key_finite BOOLEAN,
+			_key_preimage NUMERIC,
 			_key_topology BOOLEAN,
-			_key_operation BOOLEAN, 
+			_key_operation BOOLEAN,
 			_value_image BIGINT
 		)
 $body$;
@@ -210,7 +210,7 @@ $body$;
 CREATE OR REPLACE FUNCTION _countd(_measure varchar_numeric[]) RETURNS varchar_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
- * Wrapper function to coerce type 
+ * Wrapper function to coerce type
  *
  * Assert input type matches output type when calling generic count function
  *
@@ -223,11 +223,11 @@ $body$
 	FROM
 		_countd_implement($1) a0
 		(
-			_key_infinite BOOLEAN, 
-			_key_finite BOOLEAN, 
-			_key_preimage CHARACTER VARYING, 
+			_key_infinite BOOLEAN,
+			_key_finite BOOLEAN,
+			_key_preimage CHARACTER VARYING,
 			_key_topology BOOLEAN,
-			_key_operation BOOLEAN, 
+			_key_operation BOOLEAN,
 			_value_image BIGINT
 		)
 $body$;
@@ -235,7 +235,7 @@ $body$;
 CREATE OR REPLACE FUNCTION _countd(_measure varchar_varchar[]) RETURNS varchar_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
- * Wrapper function to coerce type 
+ * Wrapper function to coerce type
  *
  * Assert input type matches output type when calling generic count function
  *
@@ -248,11 +248,11 @@ $body$
 	FROM
 		_countd_implement($1) a0
 		(
-			_key_infinite BOOLEAN, 
-			_key_finite BOOLEAN, 
-			_key_preimage CHARACTER VARYING, 
+			_key_infinite BOOLEAN,
+			_key_finite BOOLEAN,
+			_key_preimage CHARACTER VARYING,
 			_key_topology BOOLEAN,
-			_key_operation BOOLEAN, 
+			_key_operation BOOLEAN,
 			_value_image BIGINT
 		)
 $body$;
@@ -260,7 +260,7 @@ $body$;
 CREATE OR REPLACE FUNCTION _countd(_measure varchar_timestamp[]) RETURNS varchar_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
- * Wrapper function to coerce type 
+ * Wrapper function to coerce type
  *
  * Assert input type matches output type when calling generic count function
  *
@@ -273,11 +273,11 @@ $body$
 	FROM
 		_countd_implement($1) a0
 		(
-			_key_infinite BOOLEAN, 
-			_key_finite BOOLEAN, 
-			_key_preimage CHARACTER VARYING, 
+			_key_infinite BOOLEAN,
+			_key_finite BOOLEAN,
+			_key_preimage CHARACTER VARYING,
 			_key_topology BOOLEAN,
-			_key_operation BOOLEAN, 
+			_key_operation BOOLEAN,
 			_value_image BIGINT
 		)
 $body$;
@@ -285,7 +285,7 @@ $body$;
 CREATE OR REPLACE FUNCTION _countd(_measure varchar_interval[]) RETURNS varchar_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
- * Wrapper function to coerce type 
+ * Wrapper function to coerce type
  *
  * Assert input type matches output type when calling generic count function
  *
@@ -298,11 +298,11 @@ $body$
 	FROM
 		_countd_implement($1) a0
 		(
-			_key_infinite BOOLEAN, 
-			_key_finite BOOLEAN, 
-			_key_preimage CHARACTER VARYING, 
+			_key_infinite BOOLEAN,
+			_key_finite BOOLEAN,
+			_key_preimage CHARACTER VARYING,
 			_key_topology BOOLEAN,
-			_key_operation BOOLEAN, 
+			_key_operation BOOLEAN,
 			_value_image BIGINT
 		)
 $body$;
@@ -314,7 +314,7 @@ $body$;
 CREATE OR REPLACE FUNCTION _countd(_measure timestamp_numeric[]) RETURNS timestamp_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
- * Wrapper function to coerce type 
+ * Wrapper function to coerce type
  *
  * Assert input type matches output type when calling generic count function
  *
@@ -327,11 +327,11 @@ $body$
 	FROM
 		_countd_implement($1) a0
 		(
-			_key_infinite BOOLEAN, 
-			_key_finite BOOLEAN, 
-			_key_preimage TIMESTAMP, 
+			_key_infinite BOOLEAN,
+			_key_finite BOOLEAN,
+			_key_preimage TIMESTAMP,
 			_key_topology BOOLEAN,
-			_key_operation BOOLEAN, 
+			_key_operation BOOLEAN,
 			_value_image BIGINT
 		)
 $body$;
@@ -339,7 +339,7 @@ $body$;
 CREATE OR REPLACE FUNCTION _countd(_measure timestamp_varchar[]) RETURNS timestamp_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
- * Wrapper function to coerce type 
+ * Wrapper function to coerce type
  *
  * Assert input type matches output type when calling generic count function
  *
@@ -352,11 +352,11 @@ $body$
 	FROM
 		_countd_implement($1) a0
 		(
-			_key_infinite BOOLEAN, 
-			_key_finite BOOLEAN, 
-			_key_preimage TIMESTAMP, 
+			_key_infinite BOOLEAN,
+			_key_finite BOOLEAN,
+			_key_preimage TIMESTAMP,
 			_key_topology BOOLEAN,
-			_key_operation BOOLEAN, 
+			_key_operation BOOLEAN,
 			_value_image BIGINT
 		)
 $body$;
@@ -364,7 +364,7 @@ $body$;
 CREATE OR REPLACE FUNCTION _countd(_measure timestamp_timestamp[]) RETURNS timestamp_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
- * Wrapper function to coerce type 
+ * Wrapper function to coerce type
  *
  * Assert input type matches output type when calling generic count function
  *
@@ -377,11 +377,11 @@ $body$
 	FROM
 		_countd_implement($1) a0
 		(
-			_key_infinite BOOLEAN, 
-			_key_finite BOOLEAN, 
-			_key_preimage TIMESTAMP, 
+			_key_infinite BOOLEAN,
+			_key_finite BOOLEAN,
+			_key_preimage TIMESTAMP,
 			_key_topology BOOLEAN,
-			_key_operation BOOLEAN, 
+			_key_operation BOOLEAN,
 			_value_image BIGINT
 		)
 $body$;
@@ -389,7 +389,7 @@ $body$;
 CREATE OR REPLACE FUNCTION _countd(_measure timestamp_interval[]) RETURNS timestamp_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
- * Wrapper function to coerce type 
+ * Wrapper function to coerce type
  *
  * Assert input type matches output type when calling generic count function
  *
@@ -402,11 +402,11 @@ $body$
 	FROM
 		_countd_implement($1) a0
 		(
-			_key_infinite BOOLEAN, 
-			_key_finite BOOLEAN, 
-			_key_preimage TIMESTAMP, 
+			_key_infinite BOOLEAN,
+			_key_finite BOOLEAN,
+			_key_preimage TIMESTAMP,
 			_key_topology BOOLEAN,
-			_key_operation BOOLEAN, 
+			_key_operation BOOLEAN,
 			_value_image BIGINT
 		)
 $body$;
@@ -418,7 +418,7 @@ $body$;
 CREATE OR REPLACE FUNCTION _countd(_measure interval_numeric[]) RETURNS interval_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
- * Wrapper function to coerce type 
+ * Wrapper function to coerce type
  *
  * Assert input type matches output type when calling generic count function
  *
@@ -431,11 +431,11 @@ $body$
 	FROM
 		_countd_implement($1) a0
 		(
-			_key_infinite BOOLEAN, 
-			_key_finite BOOLEAN, 
-			_key_preimage INTERVAL, 
+			_key_infinite BOOLEAN,
+			_key_finite BOOLEAN,
+			_key_preimage INTERVAL,
 			_key_topology BOOLEAN,
-			_key_operation BOOLEAN, 
+			_key_operation BOOLEAN,
 			_value_image BIGINT
 		)
 $body$;
@@ -443,7 +443,7 @@ $body$;
 CREATE OR REPLACE FUNCTION _countd(_measure interval_varchar[]) RETURNS interval_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
- * Wrapper function to coerce type 
+ * Wrapper function to coerce type
  *
  * Assert input type matches output type when calling generic count function
  *
@@ -456,11 +456,11 @@ $body$
 	FROM
 		_countd_implement($1) a0
 		(
-			_key_infinite BOOLEAN, 
-			_key_finite BOOLEAN, 
-			_key_preimage INTERVAL, 
+			_key_infinite BOOLEAN,
+			_key_finite BOOLEAN,
+			_key_preimage INTERVAL,
 			_key_topology BOOLEAN,
-			_key_operation BOOLEAN, 
+			_key_operation BOOLEAN,
 			_value_image BIGINT
 		)
 $body$;
@@ -468,7 +468,7 @@ $body$;
 CREATE OR REPLACE FUNCTION _countd(_measure interval_timestamp[]) RETURNS interval_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
- * Wrapper function to coerce type 
+ * Wrapper function to coerce type
  *
  * Assert input type matches output type when calling generic count function
  *
@@ -481,11 +481,11 @@ $body$
 	FROM
 		_countd_implement($1) a0
 		(
-			_key_infinite BOOLEAN, 
-			_key_finite BOOLEAN, 
-			_key_preimage INTERVAL, 
+			_key_infinite BOOLEAN,
+			_key_finite BOOLEAN,
+			_key_preimage INTERVAL,
 			_key_topology BOOLEAN,
-			_key_operation BOOLEAN, 
+			_key_operation BOOLEAN,
 			_value_image BIGINT
 		)
 $body$;
@@ -493,7 +493,7 @@ $body$;
 CREATE OR REPLACE FUNCTION _countd(_measure interval_interval[]) RETURNS interval_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
- * Wrapper function to coerce type 
+ * Wrapper function to coerce type
  *
  * Assert input type matches output type when calling generic count function
  *
@@ -506,11 +506,11 @@ $body$
 	FROM
 		_countd_implement($1) a0
 		(
-			_key_infinite BOOLEAN, 
-			_key_finite BOOLEAN, 
-			_key_preimage INTERVAL, 
+			_key_infinite BOOLEAN,
+			_key_finite BOOLEAN,
+			_key_preimage INTERVAL,
 			_key_topology BOOLEAN,
-			_key_operation BOOLEAN, 
+			_key_operation BOOLEAN,
 			_value_image BIGINT
 		)
 $body$;

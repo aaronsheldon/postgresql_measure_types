@@ -10,6 +10,7 @@ CREATE TYPE numeric_numeric AS
 	_key_preimage NUMERIC,
 	_key_topology BOOLEAN,
 	_key_operation BOOLEAN,
+	_key_ordinal BIGINT,
 	_value_image NUMERIC
 );
 
@@ -21,6 +22,7 @@ CREATE TYPE numeric_varchar AS
 	_key_preimage NUMERIC,
 	_key_topology BOOLEAN,
 	_key_operation BOOLEAN,
+	_key_ordinal BIGINT,
 	_value_image CHARACTER VARYING
 );
 
@@ -32,6 +34,7 @@ CREATE TYPE numeric_timestamp AS
 	_key_preimage NUMERIC,
 	_key_topology BOOLEAN,
 	_key_operation BOOLEAN,
+	_key_ordinal BIGINT,
 	_value_image TIMESTAMP
 );
 
@@ -43,6 +46,7 @@ CREATE TYPE numeric_interval AS
 	_key_preimage NUMERIC,
 	_key_topology BOOLEAN,
 	_key_operation BOOLEAN,
+	_key_ordinal BIGINT,
 	_value_image INTERVAL
 );
 
@@ -58,6 +62,7 @@ CREATE TYPE varchar_numeric AS
 	_key_preimage CHARACTER VARYING,
 	_key_topology BOOLEAN,
 	_key_operation BOOLEAN,
+	_key_ordinal BIGINT,
 	_value_image NUMERIC
 );
 
@@ -69,6 +74,7 @@ CREATE TYPE varchar_varchar AS
 	_key_preimage CHARACTER VARYING,
 	_key_topology BOOLEAN,
 	_key_operation BOOLEAN,
+	_key_ordinal BIGINT,
 	_value_image CHARACTER VARYING
 );
 
@@ -80,6 +86,7 @@ CREATE TYPE varchar_timestamp AS
 	_key_preimage CHARACTER VARYING,
 	_key_topology BOOLEAN,
 	_key_operation BOOLEAN,
+	_key_ordinal BIGINT,
 	_value_image TIMESTAMP
 );
 
@@ -91,6 +98,7 @@ CREATE TYPE varchar_interval AS
 	_key_preimage CHARACTER VARYING,
 	_key_topology BOOLEAN,
 	_key_operation BOOLEAN,
+	_key_ordinal BIGINT,
 	_value_image INTERVAL
 );
 
@@ -106,6 +114,7 @@ CREATE TYPE timestamp_numeric AS
 	_key_preimage TIMESTAMP,
 	_key_topology BOOLEAN,
 	_key_operation BOOLEAN,
+	_key_ordinal BIGINT,
 	_value_image NUMERIC
 );
 
@@ -117,6 +126,7 @@ CREATE TYPE timestamp_varchar AS
 	_key_preimage TIMESTAMP,
 	_key_topology BOOLEAN,
 	_key_operation BOOLEAN,
+	_key_ordinal BIGINT,
 	_value_image CHARACTER VARYING
 );
 
@@ -128,6 +138,7 @@ CREATE TYPE timestamp_timestamp AS
 	_key_preimage TIMESTAMP,
 	_key_topology BOOLEAN,
 	_key_operation BOOLEAN,
+	_key_ordinal BIGINT,
 	_value_image TIMESTAMP
 );
 
@@ -139,6 +150,7 @@ CREATE TYPE timestamp_interval AS
 	_key_preimage TIMESTAMP,
 	_key_topology BOOLEAN,
 	_key_operation BOOLEAN,
+	_key_ordinal BIGINT,
 	_value_image INTERVAL
 );
 
@@ -154,6 +166,7 @@ CREATE TYPE interval_numeric AS
 	_key_preimage INTERVAL,
 	_key_topology BOOLEAN,
 	_key_operation BOOLEAN,
+	_key_ordinal BIGINT,
 	_value_image NUMERIC
 );
 
@@ -165,6 +178,7 @@ CREATE TYPE interval_varchar AS
 	_key_preimage INTERVAL,
 	_key_topology BOOLEAN,
 	_key_operation BOOLEAN,
+	_key_ordinal BIGINT,
 	_value_image CHARACTER VARYING
 );
 
@@ -176,6 +190,7 @@ CREATE TYPE interval_timestamp AS
 	_key_preimage INTERVAL,
 	_key_topology BOOLEAN,
 	_key_operation BOOLEAN,
+	_key_ordinal BIGINT,
 	_value_image TIMESTAMP
 );
 
@@ -187,5 +202,6 @@ CREATE TYPE interval_interval AS
 	_key_preimage INTERVAL,
 	_key_topology BOOLEAN,
 	_key_operation BOOLEAN,
+	_key_ordinal BIGINT,
 	_value_image INTERVAL
 );
