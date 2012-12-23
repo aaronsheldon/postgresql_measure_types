@@ -2,7 +2,7 @@
 -- Decimal Measure Spaces --
 ----------------------------
 
-CREATE OR REPLACE FUNCTION _avgd(_measure numeric_numeric[]) RETURNS numeric_numeric[] LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _vard(_measure numeric_numeric[]) RETURNS numeric_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type
@@ -26,13 +26,13 @@ $body$
 				_key_operation,
 				CASE
 					WHEN ($1[a0._key_index])._key_operation THEN
-						COALESCE(a0._value_first / a0._value_zeroth = lag(a0._value_first / a0._value_zeroth, 1) OVER (), a0._value_first / a0._value_zeroth IS NULL AND lag(a0._value_first / a0._value_zeroth, 1) OVER () IS NULL)
+						COALESCE(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) = lag(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth), 1) OVER (), a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) IS NULL AND lag(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth), 1) OVER () IS NULL)
  					ELSE
-						COALESCE(a0._value_first / a0._value_zeroth = lead(a0._value_first / a0._value_zeroth, 1) OVER (), a0._value_first / a0._value_zeroth IS NULL AND lead(a0._value_first / a0._value_zeroth, 1) OVER () IS NULL)
+						COALESCE(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) = lead(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth), 1) OVER (), a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) IS NULL AND lead(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth), 1) OVER () IS NULL)
 				END
 				AND
 				($1[a0._key_index])._key_finite __key_redundant,
-				a0._value_first / a0._value_zeroth _value_image
+				a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) _value_image
 			FROM
 				_accumulate_distinct($1) a0
 				(
@@ -56,7 +56,7 @@ $body$
 		NOT a0._key_redundant
 $body$;
 
-CREATE OR REPLACE FUNCTION _avgd(_measure numeric_interval[]) RETURNS numeric_interval[] LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _vard(_measure numeric_interval[]) RETURNS numeric_interval[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type
@@ -80,13 +80,13 @@ $body$
 				_key_operation,
 				CASE
 					WHEN ($1[a0._key_index])._key_operation THEN
-						COALESCE(a0._value_first / a0._value_zeroth = lag(a0._value_first / a0._value_zeroth, 1) OVER (), a0._value_first / a0._value_zeroth IS NULL AND lag(a0._value_first / a0._value_zeroth, 1) OVER () IS NULL)
+						COALESCE(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) = lag(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth), 1) OVER (), a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) IS NULL AND lag(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth), 1) OVER () IS NULL)
  					ELSE
-						COALESCE(a0._value_first / a0._value_zeroth = lead(a0._value_first / a0._value_zeroth, 1) OVER (), a0._value_first / a0._value_zeroth IS NULL AND lead(a0._value_first / a0._value_zeroth, 1) OVER () IS NULL)
+						COALESCE(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) = lead(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth), 1) OVER (), a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) IS NULL AND lead(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth), 1) OVER () IS NULL)
 				END
 				AND
 				($1[a0._key_index])._key_finite __key_redundant,
-				a0._value_first / a0._value_zeroth _value_image
+				a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) _value_image
 			FROM
 				_accumulate_distinct($1) a0
 				(
@@ -114,7 +114,7 @@ $body$;
 -- String Measure Spaces --
 ---------------------------
 
-CREATE OR REPLACE FUNCTION _avgd(_measure varchar_numeric[]) RETURNS varchar_numeric[] LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _vard(_measure varchar_numeric[]) RETURNS varchar_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type
@@ -138,13 +138,13 @@ $body$
 				_key_operation,
 				CASE
 					WHEN ($1[a0._key_index])._key_operation THEN
-						COALESCE(a0._value_first / a0._value_zeroth = lag(a0._value_first / a0._value_zeroth, 1) OVER (), a0._value_first / a0._value_zeroth IS NULL AND lag(a0._value_first / a0._value_zeroth, 1) OVER () IS NULL)
+						COALESCE(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) = lag(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth), 1) OVER (), a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) IS NULL AND lag(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth), 1) OVER () IS NULL)
  					ELSE
-						COALESCE(a0._value_first / a0._value_zeroth = lead(a0._value_first / a0._value_zeroth, 1) OVER (), a0._value_first / a0._value_zeroth IS NULL AND lead(a0._value_first / a0._value_zeroth, 1) OVER () IS NULL)
+						COALESCE(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) = lead(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth), 1) OVER (), a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) IS NULL AND lead(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth), 1) OVER () IS NULL)
 				END
 				AND
 				($1[a0._key_index])._key_finite __key_redundant,
-				a0._value_first / a0._value_zeroth _value_image
+				a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) _value_image
 			FROM
 				_accumulate_distinct($1) a0
 				(
@@ -168,7 +168,7 @@ $body$
 		NOT a0._key_redundant
 $body$;
 
-CREATE OR REPLACE FUNCTION _avgd(_measure varchar_interval[]) RETURNS varchar_interval[] LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _vard(_measure varchar_interval[]) RETURNS varchar_interval[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type
@@ -192,13 +192,13 @@ $body$
 				_key_operation,
 				CASE
 					WHEN ($1[a0._key_index])._key_operation THEN
-						COALESCE(a0._value_first / a0._value_zeroth = lag(a0._value_first / a0._value_zeroth, 1) OVER (), a0._value_first / a0._value_zeroth IS NULL AND lag(a0._value_first / a0._value_zeroth, 1) OVER () IS NULL)
+						COALESCE(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) = lag(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth), 1) OVER (), a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) IS NULL AND lag(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth), 1) OVER () IS NULL)
  					ELSE
-						COALESCE(a0._value_first / a0._value_zeroth = lead(a0._value_first / a0._value_zeroth, 1) OVER (), a0._value_first / a0._value_zeroth IS NULL AND lead(a0._value_first / a0._value_zeroth, 1) OVER () IS NULL)
+						COALESCE(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) = lead(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth), 1) OVER (), a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) IS NULL AND lead(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth), 1) OVER () IS NULL)
 				END
 				AND
 				($1[a0._key_index])._key_finite __key_redundant,
-				a0._value_first / a0._value_zeroth _value_image
+				a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) _value_image
 			FROM
 				_accumulate_distinct($1) a0
 				(
@@ -226,7 +226,7 @@ $body$;
 -- Times Measure Spaces --
 --------------------------
 
-CREATE OR REPLACE FUNCTION _avgd(_measure timestamp_numeric[]) RETURNS timestamp_numeric[] LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _vard(_measure timestamp_numeric[]) RETURNS timestamp_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type
@@ -250,13 +250,13 @@ $body$
 				_key_operation,
 				CASE
 					WHEN ($1[a0._key_index])._key_operation THEN
-						COALESCE(a0._value_first / a0._value_zeroth = lag(a0._value_first / a0._value_zeroth, 1) OVER (), a0._value_first / a0._value_zeroth IS NULL AND lag(a0._value_first / a0._value_zeroth, 1) OVER () IS NULL)
+						COALESCE(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) = lag(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth), 1) OVER (), a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) IS NULL AND lag(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth), 1) OVER () IS NULL)
  					ELSE
-						COALESCE(a0._value_first / a0._value_zeroth = lead(a0._value_first / a0._value_zeroth, 1) OVER (), a0._value_first / a0._value_zeroth IS NULL AND lead(a0._value_first / a0._value_zeroth, 1) OVER () IS NULL)
+						COALESCE(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) = lead(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth), 1) OVER (), a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) IS NULL AND lead(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth), 1) OVER () IS NULL)
 				END
 				AND
 				($1[a0._key_index])._key_finite __key_redundant,
-				a0._value_first / a0._value_zeroth _value_image
+				a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) _value_image
 			FROM
 				_accumulate_distinct($1) a0
 				(
@@ -280,7 +280,7 @@ $body$
 		NOT a0._key_redundant
 $body$;
 
-CREATE OR REPLACE FUNCTION _avgd(_measure timestamp_interval[]) RETURNS timestamp_interval[] LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _vard(_measure timestamp_interval[]) RETURNS timestamp_interval[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type
@@ -304,13 +304,13 @@ $body$
 				_key_operation,
 				CASE
 					WHEN ($1[a0._key_index])._key_operation THEN
-						COALESCE(a0._value_first / a0._value_zeroth = lag(a0._value_first / a0._value_zeroth, 1) OVER (), a0._value_first / a0._value_zeroth IS NULL AND lag(a0._value_first / a0._value_zeroth, 1) OVER () IS NULL)
+						COALESCE(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) = lag(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth), 1) OVER (), a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) IS NULL AND lag(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth), 1) OVER () IS NULL)
  					ELSE
-						COALESCE(a0._value_first / a0._value_zeroth = lead(a0._value_first / a0._value_zeroth, 1) OVER (), a0._value_first / a0._value_zeroth IS NULL AND lead(a0._value_first / a0._value_zeroth, 1) OVER () IS NULL)
+						COALESCE(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) = lead(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth), 1) OVER (), a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) IS NULL AND lead(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth), 1) OVER () IS NULL)
 				END
 				AND
 				($1[a0._key_index])._key_finite __key_redundant,
-				a0._value_first / a0._value_zeroth _value_image
+				a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) _value_image
 			FROM
 				_accumulate_distinct($1) a0
 				(
@@ -338,7 +338,7 @@ $body$;
 -- Duration Measure Spaces --
 -----------------------------
 
-CREATE OR REPLACE FUNCTION _avgd(_measure interval_numeric[]) RETURNS interval_numeric[] LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _vard(_measure interval_numeric[]) RETURNS interval_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type
@@ -362,13 +362,13 @@ $body$
 				_key_operation,
 				CASE
 					WHEN ($1[a0._key_index])._key_operation THEN
-						COALESCE(a0._value_first / a0._value_zeroth = lag(a0._value_first / a0._value_zeroth, 1) OVER (), a0._value_first / a0._value_zeroth IS NULL AND lag(a0._value_first / a0._value_zeroth, 1) OVER () IS NULL)
+						COALESCE(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) = lag(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth), 1) OVER (), a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) IS NULL AND lag(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth), 1) OVER () IS NULL)
  					ELSE
-						COALESCE(a0._value_first / a0._value_zeroth = lead(a0._value_first / a0._value_zeroth, 1) OVER (), a0._value_first / a0._value_zeroth IS NULL AND lead(a0._value_first / a0._value_zeroth, 1) OVER () IS NULL)
+						COALESCE(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) = lead(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth), 1) OVER (), a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) IS NULL AND lead(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth), 1) OVER () IS NULL)
 				END
 				AND
 				($1[a0._key_index])._key_finite __key_redundant,
-				a0._value_first / a0._value_zeroth _value_image
+				a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) _value_image
 			FROM
 				_accumulate_distinct($1) a0
 				(
@@ -392,7 +392,7 @@ $body$
 		NOT a0._key_redundant
 $body$;
 
-CREATE OR REPLACE FUNCTION _avgd(_measure interval_interval[]) RETURNS interval_interval[] LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _vard(_measure interval_interval[]) RETURNS interval_interval[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type
@@ -416,13 +416,13 @@ $body$
 				_key_operation,
 				CASE
 					WHEN ($1[a0._key_index])._key_operation THEN
-						COALESCE(a0._value_first / a0._value_zeroth = lag(a0._value_first / a0._value_zeroth, 1) OVER (), a0._value_first / a0._value_zeroth IS NULL AND lag(a0._value_first / a0._value_zeroth, 1) OVER () IS NULL)
+						COALESCE(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) = lag(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth), 1) OVER (), a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) IS NULL AND lag(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth), 1) OVER () IS NULL)
  					ELSE
-						COALESCE(a0._value_first / a0._value_zeroth = lead(a0._value_first / a0._value_zeroth, 1) OVER (), a0._value_first / a0._value_zeroth IS NULL AND lead(a0._value_first / a0._value_zeroth, 1) OVER () IS NULL)
+						COALESCE(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) = lead(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth), 1) OVER (), a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) IS NULL AND lead(a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth), 1) OVER () IS NULL)
 				END
 				AND
 				($1[a0._key_index])._key_finite __key_redundant,
-				a0._value_first / a0._value_zeroth _value_image
+				a0._value_second - (a0._value_first * a0._value_first / a0._value_zeroth) _value_image
 			FROM
 				_accumulate_distinct($1) a0
 				(
@@ -450,58 +450,58 @@ $body$;
 -- Final Aggregates --
 ----------------------
 
-CREATE AGGREGATE avgd(numeric_numeric[])
+CREATE AGGREGATE vard(numeric_numeric[])
 (
 	sfunc = array_cat,
 	stype = numeric_numeric[],
-	ffunc = _avgd
+	ffunc = _vard
 );
 
-CREATE AGGREGATE avgd(numeric_interval[])
+CREATE AGGREGATE vard(numeric_interval[])
 (
 	sfunc = array_cat,
 	stype = numeric_interval[],
-	ffunc = _avgd
+	ffunc = _vard
 );
 
-CREATE AGGREGATE avgd(varchar_numeric[])
+CREATE AGGREGATE vard(varchar_numeric[])
 (
 	sfunc = array_cat,
 	stype = varchar_numeric[],
-	ffunc = _avgd
+	ffunc = _vard
 );
 
-CREATE AGGREGATE avgd(varchar_interval[])
+CREATE AGGREGATE vard(varchar_interval[])
 (
 	sfunc = array_cat,
 	stype = varchar_interval[],
-	ffunc = _avgd
+	ffunc = _vard
 );
 
-CREATE AGGREGATE avgd(timestamp_numeric[])
+CREATE AGGREGATE vard(timestamp_numeric[])
 (
 	sfunc = array_cat,
 	stype = timestamp_numeric[],
-	ffunc = _avgd
+	ffunc = _vard
 );
 
-CREATE AGGREGATE avgd(timestamp_interval[])
+CREATE AGGREGATE vard(timestamp_interval[])
 (
 	sfunc = array_cat,
 	stype = timestamp_interval[],
-	ffunc = _avgd
+	ffunc = _vard
 );
 
-CREATE AGGREGATE avgd(interval_numeric[])
+CREATE AGGREGATE vard(interval_numeric[])
 (
 	sfunc = array_cat,
 	stype = interval_numeric[],
-	ffunc = _avgd
+	ffunc = _vard
 );
 
-CREATE AGGREGATE avgd(interval_interval[])
+CREATE AGGREGATE vard(interval_interval[])
 (
 	sfunc = array_cat,
 	stype = interval_interval[],
-	ffunc = _avgd
+	ffunc = _vard
 );

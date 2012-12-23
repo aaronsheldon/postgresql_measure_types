@@ -2,7 +2,7 @@
 -- Decimal Measure Spaces --
 ----------------------------
 
-CREATE OR REPLACE FUNCTION _avg(_measure numeric_numeric[]) RETURNS numeric_numeric[] LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _sumd(_measure numeric_numeric[]) RETURNS numeric_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type
@@ -56,7 +56,7 @@ $body$
 		NOT a0._key_redundant
 $body$;
 
-CREATE OR REPLACE FUNCTION _avg(_measure numeric_interval[]) RETURNS numeric_interval[] LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _sumd(_measure numeric_interval[]) RETURNS numeric_interval[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type
@@ -114,7 +114,7 @@ $body$;
 -- String Measure Spaces --
 ---------------------------
 
-CREATE OR REPLACE FUNCTION _avg(_measure varchar_numeric[]) RETURNS varchar_numeric[] LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _sumd(_measure varchar_numeric[]) RETURNS varchar_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type
@@ -168,7 +168,7 @@ $body$
 		NOT a0._key_redundant
 $body$;
 
-CREATE OR REPLACE FUNCTION _avg(_measure varchar_interval[]) RETURNS varchar_interval[] LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _sumd(_measure varchar_interval[]) RETURNS varchar_interval[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type
@@ -226,7 +226,7 @@ $body$;
 -- Times Measure Spaces --
 --------------------------
 
-CREATE OR REPLACE FUNCTION _avg(_measure timestamp_numeric[]) RETURNS timestamp_numeric[] LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _sumd(_measure timestamp_numeric[]) RETURNS timestamp_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type
@@ -280,7 +280,7 @@ $body$
 		NOT a0._key_redundant
 $body$;
 
-CREATE OR REPLACE FUNCTION _avg(_measure timestamp_interval[]) RETURNS timestamp_interval[] LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _sumd(_measure timestamp_interval[]) RETURNS timestamp_interval[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type
@@ -338,7 +338,7 @@ $body$;
 -- Duration Measure Spaces --
 -----------------------------
 
-CREATE OR REPLACE FUNCTION _avg(_measure interval_numeric[]) RETURNS interval_numeric[] LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _sumd(_measure interval_numeric[]) RETURNS interval_numeric[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type
@@ -392,7 +392,7 @@ $body$
 		NOT a0._key_redundant
 $body$;
 
-CREATE OR REPLACE FUNCTION _avg(_measure interval_interval[]) RETURNS interval_interval[] LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _sumd(_measure interval_interval[]) RETURNS interval_interval[] LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Wrapper function to coerce type
@@ -445,3 +445,63 @@ $body$
 	WHERE
 		NOT a0._key_redundant
 $body$;
+
+----------------------
+-- Final Aggregates --
+----------------------
+
+CREATE AGGREGATE sumd(numeric_numeric[])
+(
+	sfunc = array_cat,
+	stype = numeric_numeric[],
+	ffunc = _sumd
+);
+
+CREATE AGGREGATE sumd(numeric_interval[])
+(
+	sfunc = array_cat,
+	stype = numeric_interval[],
+	ffunc = _sumd
+);
+
+CREATE AGGREGATE sumd(varchar_numeric[])
+(
+	sfunc = array_cat,
+	stype = varchar_numeric[],
+	ffunc = _sumd
+);
+
+CREATE AGGREGATE sumd(varchar_interval[])
+(
+	sfunc = array_cat,
+	stype = varchar_interval[],
+	ffunc = _sumd
+);
+
+CREATE AGGREGATE sumd(timestamp_numeric[])
+(
+	sfunc = array_cat,
+	stype = timestamp_numeric[],
+	ffunc = _sumd
+);
+
+CREATE AGGREGATE sumd(timestamp_interval[])
+(
+	sfunc = array_cat,
+	stype = timestamp_interval[],
+	ffunc = _sumd
+);
+
+CREATE AGGREGATE sumd(interval_numeric[])
+(
+	sfunc = array_cat,
+	stype = interval_numeric[],
+	ffunc = _sumd
+);
+
+CREATE AGGREGATE sumd(interval_interval[])
+(
+	sfunc = array_cat,
+	stype = interval_interval[],
+	ffunc = _sumd
+);

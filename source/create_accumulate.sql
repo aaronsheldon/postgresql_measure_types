@@ -126,7 +126,7 @@ $body$
 		a0._value_zeroth::BIGINT,
 		CASE
 			WHEN a0._value_zeroth > 0 THEN
-				a0._Value_first
+				a0._value_first
 			ELSE
 				NULL
 		END _value_first,

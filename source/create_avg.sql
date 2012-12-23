@@ -445,3 +445,63 @@ $body$
 	WHERE
 		NOT a0._key_redundant
 $body$;
+
+----------------------
+-- Final Aggregates --
+----------------------
+
+CREATE AGGREGATE avg(numeric_numeric[])
+(
+	sfunc = array_cat,
+	stype = numeric_numeric[],
+	ffunc = _avg
+);
+
+CREATE AGGREGATE avg(numeric_interval[])
+(
+	sfunc = array_cat,
+	stype = numeric_interval[],
+	ffunc = _avg
+);
+
+CREATE AGGREGATE avg(varchar_numeric[])
+(
+	sfunc = array_cat,
+	stype = varchar_numeric[],
+	ffunc = _avg
+);
+
+CREATE AGGREGATE avg(varchar_interval[])
+(
+	sfunc = array_cat,
+	stype = varchar_interval[],
+	ffunc = _avg
+);
+
+CREATE AGGREGATE avg(timestamp_numeric[])
+(
+	sfunc = array_cat,
+	stype = timestamp_numeric[],
+	ffunc = _avg
+);
+
+CREATE AGGREGATE avg(timestamp_interval[])
+(
+	sfunc = array_cat,
+	stype = timestamp_interval[],
+	ffunc = _avg
+);
+
+CREATE AGGREGATE avg(interval_numeric[])
+(
+	sfunc = array_cat,
+	stype = interval_numeric[],
+	ffunc = _avg
+);
+
+CREATE AGGREGATE avg(interval_interval[])
+(
+	sfunc = array_cat,
+	stype = interval_interval[],
+	ffunc = _avg
+);

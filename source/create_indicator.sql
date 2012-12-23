@@ -16,7 +16,6 @@ RETURNS TABLE
 	_key_preimage anyelement,
 	_key_topology BOOLEAN,
 	_key_operation BOOLEAN,
-	_key_ordinal BIGINT,
 	_value_image NUMERIC
 )
 LANGUAGE sql IMMUTABLE AS
@@ -36,7 +35,6 @@ $body$
  *   - key attribute: preimage
  *   - key attribute: is the preimage between right closed and left open sets
  *   - key attribute: is the image pushed to the stack
- *   - key attribute: order of the function in the list
  *   - value attribute: image
  *
  * Uses a simple hash in the where clause to select the appropriate boundary
@@ -57,33 +55,32 @@ $body$
 		a0._key_preimage,
 		a0._key_topology::BOOLEAN,
 		a0._key_operation::BOOLEAN,
-		a0._key_ordinal::BIGINT,
 		a0._value_image::NUMERIC
 	FROM
 		(
 			VALUES
-			(1, FALSE, FALSE, NULL, TRUE, TRUE, 1, 1),
-			(1, TRUE, FALSE, NULL, FALSE, FALSE, 1, 1),
-			(2, FALSE, FALSE, NULL, TRUE, TRUE, 1, 1),
-			(2, FALSE, TRUE, $3, $4 = ']', FALSE, 1, 1),
-			(2, FALSE, TRUE, $3, $4 = ']', TRUE, 1, 0),
-			(2, TRUE, FALSE, NULL, FALSE, FALSE, 1, 0),
-			(3, FALSE, FALSE, NULL, TRUE, TRUE, 1, 0),
-			(3, FALSE, TRUE, $2, $1 = '(', FALSE, 1, 0),
-			(3, FALSE, TRUE, $2, $1 = '(', TRUE, 1, 1),
-			(3, TRUE, FALSE, NULL, FALSE, FALSE, 1, 1),
-			(4, FALSE, FALSE, NULL, TRUE, TRUE, 1, 0),
-			(4, FALSE, TRUE, $2, FALSE, FALSE, 1, 0),
-			(4, FALSE, TRUE, $2, FALSE, TRUE, 1, 1),
-			(4, FALSE, TRUE, $3, TRUE, FALSE, 1, 1),
-			(4, FALSE, TRUE, $3, TRUE, TRUE, 1, 0),
-			(4, TRUE, FALSE, NULL, FALSE, FALSE, 1, 0),
-			(5, FALSE, FALSE, NULL, TRUE, TRUE, 1, 0),
-			(5, FALSE, TRUE, $2, $1 = '(', FALSE, 1, 0),
-			(5, FALSE, TRUE, $2, $1 = '(', TRUE, 1, 1),
-			(5, FALSE, TRUE, $3, $4 = ']', FALSE, 1, 1),
-			(5, FALSE, TRUE, $3, $4 = ']', TRUE, 1, 0),
-			(5, TRUE, FALSE, NULL, FALSE, FALSE, 1, 0)
+			(1, FALSE, FALSE, NULL, TRUE, TRUE, 1),
+			(1, TRUE, FALSE, NULL, FALSE, FALSE, 1),
+			(2, FALSE, FALSE, NULL, TRUE, TRUE, 1),
+			(2, FALSE, TRUE, $3, $4 = ']', FALSE, 1),
+			(2, FALSE, TRUE, $3, $4 = ']', TRUE, 0),
+			(2, TRUE, FALSE, NULL, FALSE, FALSE, 0),
+			(3, FALSE, FALSE, NULL, TRUE, TRUE, 0),
+			(3, FALSE, TRUE, $2, $1 = '(', FALSE, 0),
+			(3, FALSE, TRUE, $2, $1 = '(', TRUE, 1),
+			(3, TRUE, FALSE, NULL, FALSE, FALSE, 1),
+			(4, FALSE, FALSE, NULL, TRUE, TRUE, 0),
+			(4, FALSE, TRUE, $2, FALSE, FALSE, 0),
+			(4, FALSE, TRUE, $2, FALSE, TRUE, 1),
+			(4, FALSE, TRUE, $3, TRUE, FALSE, 1),
+			(4, FALSE, TRUE, $3, TRUE, TRUE, 0),
+			(4, TRUE, FALSE, NULL, FALSE, FALSE, 0),
+			(5, FALSE, FALSE, NULL, TRUE, TRUE, 0),
+			(5, FALSE, TRUE, $2, $1 = '(', FALSE, 0),
+			(5, FALSE, TRUE, $2, $1 = '(', TRUE, 1),
+			(5, FALSE, TRUE, $3, $4 = ']', FALSE, 1),
+			(5, FALSE, TRUE, $3, $4 = ']', TRUE, 0),
+			(5, TRUE, FALSE, NULL, FALSE, FALSE, 0)
 		)
 		a0
 		(
@@ -93,7 +90,6 @@ $body$
 			_key_preimage,
 			_key_topology,
 			_key_operation,
-			_key_ordinal,
 			_value_image
 		)
 	WHERE
@@ -139,7 +135,7 @@ $body$
  * @return numeric_numeric Representation of a simple measurable function
  */
 	SELECT
-		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._key_ordinal, a0._value_image)::numeric_numeric) _return
+		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._value_image)::numeric_numeric) _return
 	FROM
 		_indicator($1, $2, $3, $4) a0;
 $body$;
@@ -170,7 +166,7 @@ $body$
  * @return varchar_numeric Representation of a simple measurable function
  */
 	SELECT
-		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._key_ordinal, a0._value_image)::varchar_numeric) _return
+		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._value_image)::varchar_numeric) _return
 	FROM
 		_indicator($1, $2, $3, $4) a0;
 $body$;
@@ -201,7 +197,7 @@ $body$
  * @return timestamp_numeric Representation of a simple measurable function
  */
 	SELECT
-		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._key_ordinal, a0._value_image)::timestamp_numeric) _return
+		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._value_image)::timestamp_numeric) _return
 	FROM
 		_indicator($1, $2, $3, $4) a0;
 $body$;
@@ -232,7 +228,7 @@ $body$
  * @return interval_numeric Representation of a simple measurable function
  */
 		SELECT
-		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._key_ordinal, a0._value_image)::interval_numeric) _return
+		array_agg(ROW(a0._key_infinite, a0._key_finite, a0._key_preimage, a0._key_topology, a0._key_operation, a0._value_image)::interval_numeric) _return
 	FROM
 		_indicator($1, $2, $3, $4) a0;
 $body$;

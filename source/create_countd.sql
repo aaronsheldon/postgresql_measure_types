@@ -5,7 +5,7 @@
 CREATE OR REPLACE FUNCTION _countd_implement(_measure anyarray) RETURNS SETOF RECORD LANGUAGE sql IMMUTABLE AS
 $body$
 /*
- * Pointwise Not NUll Count of Simple Measurable Functions
+ * Pointwise Not Null Count of Simple Measurable Functions
  *
  * Find the count on each boundary by cumulatively adding 1 for every not null pushed and
  * substracting 1 popped for every not null popped. The final value on popped boundary is the value
@@ -514,3 +514,119 @@ $body$
 			_value_image BIGINT
 		)
 $body$;
+
+----------------------
+-- Final Aggregates --
+----------------------
+
+CREATE AGGREGATE countd(numeric_numeric[])
+(
+	sfunc = array_cat,
+	stype = numeric_numeric[],
+	ffunc = _countd
+);
+
+CREATE AGGREGATE countd(numeric_varchar[])
+(
+	sfunc = array_cat,
+	stype = numeric_numeric[],
+	ffunc = _countd
+);
+
+CREATE AGGREGATE countd(numeric_timestamp[])
+(
+	sfunc = array_cat,
+	stype = numeric_numeric[],
+	ffunc = _countd
+);
+
+CREATE AGGREGATE countd(numeric_interval[])
+(
+	sfunc = array_cat,
+	stype = numeric_numeric[],
+	ffunc = _countd
+);
+
+CREATE AGGREGATE countd(varchar_numeric[])
+(
+	sfunc = array_cat,
+	stype = varchar_numeric[],
+	ffunc = _countd
+);
+
+CREATE AGGREGATE countd(varchar_varchar[])
+(
+	sfunc = array_cat,
+	stype = varchar_numeric[],
+	ffunc = _countd
+);
+
+CREATE AGGREGATE countd(varchar_timestamp[])
+(
+	sfunc = array_cat,
+	stype = varchar_numeric[],
+	ffunc = _countd
+);
+
+CREATE AGGREGATE countd(varchar_interval[])
+(
+	sfunc = array_cat,
+	stype = varchar_numeric[],
+	ffunc = _countd
+);
+
+CREATE AGGREGATE countd(timestamp_numeric[])
+(
+	sfunc = array_cat,
+	stype = timestamp_numeric[],
+	ffunc = _countd
+);
+
+CREATE AGGREGATE countd(timestamp_varchar[])
+(
+	sfunc = array_cat,
+	stype = timestamp_numeric[],
+	ffunc = _countd
+);
+
+CREATE AGGREGATE countd(timestamp_timestamp[])
+(
+	sfunc = array_cat,
+	stype = timestamp_numeric[],
+	ffunc = _countd
+);
+
+CREATE AGGREGATE countd(timestamp_interval[])
+(
+	sfunc = array_cat,
+	stype = timestamp_numeric[],
+	ffunc = _countd
+);
+
+CREATE AGGREGATE countd(interval_numeric[])
+(
+	sfunc = array_cat,
+	stype = interval_numeric[],
+	ffunc = _countd
+);
+
+CREATE AGGREGATE countd(interval_varchar[])
+(
+	sfunc = array_cat,
+	stype = interval_numeric[],
+	ffunc = _countd
+);
+
+CREATE AGGREGATE countd(interval_timestamp[])
+(
+	sfunc = array_cat,
+	stype = interval_numeric[],
+	ffunc = _countd
+);
+
+CREATE AGGREGATE countd(interval_interval[])
+(
+	sfunc = array_cat,
+	stype = interval_numeric[],
+	ffunc = _countd
+);

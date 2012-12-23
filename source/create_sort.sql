@@ -2,7 +2,13 @@
 -- Generic measure spaces --
 ----------------------------
 
-CREATE OR REPLACE FUNCTION _sort(_measure anyarray) RETURNS TABLE (_key_index BIGINT, _key_ordinal BIGINT, _value_distinct BOOLEAN) LANGUAGE sql IMMUTABLE AS
+CREATE OR REPLACE FUNCTION _sort(_measure anyarray) RETURNS TABLE
+(
+	_key_index BIGINT,
+	_key_ordinal BIGINT,
+	_value_distinct BOOLEAN
+)
+LANGUAGE sql IMMUTABLE AS
 $body$
 /*
  * Sort Array Subscripts in Topological Order
@@ -22,7 +28,7 @@ $body$
 		(
 			SELECT
 				a0._key_index,
-				SUM(CASE WHEN ($1[a0._key_index])._key_infinite THEN 0 WHEN ($1[a0._key_index])._key_finite THEN 0 ELSE 1 END) OVER ordinal_frame _key_ordinal
+				sum(CASE WHEN ($1[a0._key_index])._key_infinite THEN 0 WHEN ($1[a0._key_index])._key_finite THEN 0 ELSE 1 END) OVER ordinal_frame _key_ordinal
 			FROM
 				generate_series(1::BIGINT, array_length($1, 1)::BIGINT, 1::BIGINT) a0(_key_index)
 			WINDOW
@@ -35,7 +41,7 @@ $body$
 		a0._key_ordinal,
 		CASE
 			WHEN ($1[a0._key_index])._key_operation THEN
-				1 = SUM(CASE WHEN ($1[a0._key_index])._key_operation THEN 1 ELSE -1 END) OVER operation_frame
+				1 = sum(CASE WHEN ($1[a0._key_index])._key_operation THEN 1 ELSE -1 END) OVER operation_frame
 				AND
 				(
 					COALESCE(($1[a0._key_index])._key_preimage > lag(($1[a0._key_index])._key_preimage, 1) OVER image_frame, TRUE)
@@ -43,7 +49,7 @@ $body$
 					COALESCE(($1[a0._key_index])._key_topology > lag(($1[a0._key_index])._key_topology, 1) OVER image_frame, TRUE)
 				)
 			ELSE
-				0 = SUM(CASE WHEN ($1[a0._key_index])._key_operation THEN 1 ELSE -1 END) OVER operation_frame
+				0 = sum(CASE WHEN ($1[a0._key_index])._key_operation THEN 1 ELSE -1 END) OVER operation_frame
 				AND
 				(
 					COALESCE(($1[a0._key_index])._key_preimage < lead(($1[a0._key_index])._key_preimage, 1) OVER image_frame, TRUE)
