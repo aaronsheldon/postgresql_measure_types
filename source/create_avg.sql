@@ -25,13 +25,13 @@ $body$
 				_key_topology,
 				_key_operation,
 				CASE
-					WHEN ($1[a0._key_index])._key_operation THEN
+					WHEN a0._key_operation THEN
 						COALESCE(a0._value_first / a0._value_zeroth = lag(a0._value_first / a0._value_zeroth, 1) OVER (), a0._value_first / a0._value_zeroth IS NULL AND lag(a0._value_first / a0._value_zeroth, 1) OVER () IS NULL)
  					ELSE
 						COALESCE(a0._value_first / a0._value_zeroth = lead(a0._value_first / a0._value_zeroth, 1) OVER (), a0._value_first / a0._value_zeroth IS NULL AND lead(a0._value_first / a0._value_zeroth, 1) OVER () IS NULL)
 				END
 				AND
-				($1[a0._key_index])._key_finite __key_redundant,
+				a0._key_finite _key_redundant,
 				a0._value_first / a0._value_zeroth _value_image
 			FROM
 				_accumulate($1) a0
@@ -79,13 +79,13 @@ $body$
 				_key_topology,
 				_key_operation,
 				CASE
-					WHEN ($1[a0._key_index])._key_operation THEN
+					WHEN a0._key_operation THEN
 						COALESCE(a0._value_first / a0._value_zeroth = lag(a0._value_first / a0._value_zeroth, 1) OVER (), a0._value_first / a0._value_zeroth IS NULL AND lag(a0._value_first / a0._value_zeroth, 1) OVER () IS NULL)
  					ELSE
 						COALESCE(a0._value_first / a0._value_zeroth = lead(a0._value_first / a0._value_zeroth, 1) OVER (), a0._value_first / a0._value_zeroth IS NULL AND lead(a0._value_first / a0._value_zeroth, 1) OVER () IS NULL)
 				END
 				AND
-				($1[a0._key_index])._key_finite __key_redundant,
+				a0._key_finite _key_redundant,
 				a0._value_first / a0._value_zeroth _value_image
 			FROM
 				_accumulate($1) a0
@@ -137,13 +137,13 @@ $body$
 				_key_topology,
 				_key_operation,
 				CASE
-					WHEN ($1[a0._key_index])._key_operation THEN
+					WHEN a0._key_operation THEN
 						COALESCE(a0._value_first / a0._value_zeroth = lag(a0._value_first / a0._value_zeroth, 1) OVER (), a0._value_first / a0._value_zeroth IS NULL AND lag(a0._value_first / a0._value_zeroth, 1) OVER () IS NULL)
  					ELSE
 						COALESCE(a0._value_first / a0._value_zeroth = lead(a0._value_first / a0._value_zeroth, 1) OVER (), a0._value_first / a0._value_zeroth IS NULL AND lead(a0._value_first / a0._value_zeroth, 1) OVER () IS NULL)
 				END
 				AND
-				($1[a0._key_index])._key_finite __key_redundant,
+				a0._key_finite _key_redundant,
 				a0._value_first / a0._value_zeroth _value_image
 			FROM
 				_accumulate($1) a0
@@ -191,13 +191,13 @@ $body$
 				_key_topology,
 				_key_operation,
 				CASE
-					WHEN ($1[a0._key_index])._key_operation THEN
+					WHEN a0._key_operation THEN
 						COALESCE(a0._value_first / a0._value_zeroth = lag(a0._value_first / a0._value_zeroth, 1) OVER (), a0._value_first / a0._value_zeroth IS NULL AND lag(a0._value_first / a0._value_zeroth, 1) OVER () IS NULL)
  					ELSE
 						COALESCE(a0._value_first / a0._value_zeroth = lead(a0._value_first / a0._value_zeroth, 1) OVER (), a0._value_first / a0._value_zeroth IS NULL AND lead(a0._value_first / a0._value_zeroth, 1) OVER () IS NULL)
 				END
 				AND
-				($1[a0._key_index])._key_finite __key_redundant,
+				a0._key_finite _key_redundant,
 				a0._value_first / a0._value_zeroth _value_image
 			FROM
 				_accumulate($1) a0
@@ -249,13 +249,13 @@ $body$
 				_key_topology,
 				_key_operation,
 				CASE
-					WHEN ($1[a0._key_index])._key_operation THEN
+					WHEN a0._key_operation THEN
 						COALESCE(a0._value_first / a0._value_zeroth = lag(a0._value_first / a0._value_zeroth, 1) OVER (), a0._value_first / a0._value_zeroth IS NULL AND lag(a0._value_first / a0._value_zeroth, 1) OVER () IS NULL)
  					ELSE
 						COALESCE(a0._value_first / a0._value_zeroth = lead(a0._value_first / a0._value_zeroth, 1) OVER (), a0._value_first / a0._value_zeroth IS NULL AND lead(a0._value_first / a0._value_zeroth, 1) OVER () IS NULL)
 				END
 				AND
-				($1[a0._key_index])._key_finite __key_redundant,
+				a0._key_finite _key_redundant,
 				a0._value_first / a0._value_zeroth _value_image
 			FROM
 				_accumulate($1) a0
@@ -303,13 +303,13 @@ $body$
 				_key_topology,
 				_key_operation,
 				CASE
-					WHEN ($1[a0._key_index])._key_operation THEN
+					WHEN a0._key_operation THEN
 						COALESCE(a0._value_first / a0._value_zeroth = lag(a0._value_first / a0._value_zeroth, 1) OVER (), a0._value_first / a0._value_zeroth IS NULL AND lag(a0._value_first / a0._value_zeroth, 1) OVER () IS NULL)
  					ELSE
 						COALESCE(a0._value_first / a0._value_zeroth = lead(a0._value_first / a0._value_zeroth, 1) OVER (), a0._value_first / a0._value_zeroth IS NULL AND lead(a0._value_first / a0._value_zeroth, 1) OVER () IS NULL)
 				END
 				AND
-				($1[a0._key_index])._key_finite __key_redundant,
+				a0._key_finite _key_redundant,
 				a0._value_first / a0._value_zeroth _value_image
 			FROM
 				_accumulate($1) a0
@@ -361,13 +361,13 @@ $body$
 				_key_topology,
 				_key_operation,
 				CASE
-					WHEN ($1[a0._key_index])._key_operation THEN
+					WHEN a0._key_operation THEN
 						COALESCE(a0._value_first / a0._value_zeroth = lag(a0._value_first / a0._value_zeroth, 1) OVER (), a0._value_first / a0._value_zeroth IS NULL AND lag(a0._value_first / a0._value_zeroth, 1) OVER () IS NULL)
  					ELSE
 						COALESCE(a0._value_first / a0._value_zeroth = lead(a0._value_first / a0._value_zeroth, 1) OVER (), a0._value_first / a0._value_zeroth IS NULL AND lead(a0._value_first / a0._value_zeroth, 1) OVER () IS NULL)
 				END
 				AND
-				($1[a0._key_index])._key_finite __key_redundant,
+				a0._key_finite _key_redundant,
 				a0._value_first / a0._value_zeroth _value_image
 			FROM
 				_accumulate($1) a0
@@ -415,13 +415,13 @@ $body$
 				_key_topology,
 				_key_operation,
 				CASE
-					WHEN ($1[a0._key_index])._key_operation THEN
+					WHEN a0._key_operation THEN
 						COALESCE(a0._value_first / a0._value_zeroth = lag(a0._value_first / a0._value_zeroth, 1) OVER (), a0._value_first / a0._value_zeroth IS NULL AND lag(a0._value_first / a0._value_zeroth, 1) OVER () IS NULL)
  					ELSE
 						COALESCE(a0._value_first / a0._value_zeroth = lead(a0._value_first / a0._value_zeroth, 1) OVER (), a0._value_first / a0._value_zeroth IS NULL AND lead(a0._value_first / a0._value_zeroth, 1) OVER () IS NULL)
 				END
 				AND
-				($1[a0._key_index])._key_finite __key_redundant,
+				a0._key_finite _key_redundant,
 				a0._value_first / a0._value_zeroth _value_image
 			FROM
 				_accumulate($1) a0
@@ -454,54 +454,54 @@ CREATE AGGREGATE avg(numeric_numeric[])
 (
 	sfunc = array_cat,
 	stype = numeric_numeric[],
-	ffunc = _avg
+	finalfunc = _avg
 );
 
 CREATE AGGREGATE avg(numeric_interval[])
 (
 	sfunc = array_cat,
 	stype = numeric_interval[],
-	ffunc = _avg
+	finalfunc = _avg
 );
 
 CREATE AGGREGATE avg(varchar_numeric[])
 (
 	sfunc = array_cat,
 	stype = varchar_numeric[],
-	ffunc = _avg
+	finalfunc = _avg
 );
 
 CREATE AGGREGATE avg(varchar_interval[])
 (
 	sfunc = array_cat,
 	stype = varchar_interval[],
-	ffunc = _avg
+	finalfunc = _avg
 );
 
 CREATE AGGREGATE avg(timestamp_numeric[])
 (
 	sfunc = array_cat,
 	stype = timestamp_numeric[],
-	ffunc = _avg
+	finalfunc = _avg
 );
 
 CREATE AGGREGATE avg(timestamp_interval[])
 (
 	sfunc = array_cat,
 	stype = timestamp_interval[],
-	ffunc = _avg
+	finalfunc = _avg
 );
 
 CREATE AGGREGATE avg(interval_numeric[])
 (
 	sfunc = array_cat,
 	stype = interval_numeric[],
-	ffunc = _avg
+	finalfunc = _avg
 );
 
 CREATE AGGREGATE avg(interval_interval[])
 (
 	sfunc = array_cat,
 	stype = interval_interval[],
-	ffunc = _avg
+	finalfunc = _avg
 );

@@ -523,110 +523,110 @@ CREATE AGGREGATE count(numeric_numeric[])
 (
 	sfunc = array_cat,
 	stype = numeric_numeric[],
-	ffunc = _count
+	finalfunc = _count
 );
 
 CREATE AGGREGATE count(numeric_varchar[])
 (
 	sfunc = array_cat,
-	stype = numeric_numeric[],
-	ffunc = _count
+	stype = numeric_varchar[],
+	finalfunc = _count
 );
 
 CREATE AGGREGATE count(numeric_timestamp[])
 (
 	sfunc = array_cat,
-	stype = numeric_numeric[],
-	ffunc = _count
+	stype = numeric_timestamp[],
+	finalfunc = _count
 );
 
 CREATE AGGREGATE count(numeric_interval[])
 (
 	sfunc = array_cat,
-	stype = numeric_numeric[],
-	ffunc = _count
+	stype = numeric_interval[],
+	finalfunc = _count
 );
 
 CREATE AGGREGATE count(varchar_numeric[])
 (
 	sfunc = array_cat,
 	stype = varchar_numeric[],
-	ffunc = _count
+	finalfunc = _count
 );
 
 CREATE AGGREGATE count(varchar_varchar[])
 (
 	sfunc = array_cat,
-	stype = varchar_numeric[],
-	ffunc = _count
+	stype = varchar_varchar[],
+	finalfunc = _count
 );
 
 CREATE AGGREGATE count(varchar_timestamp[])
 (
 	sfunc = array_cat,
-	stype = varchar_numeric[],
-	ffunc = _count
+	stype = varchar_timestamp[],
+	finalfunc = _count
 );
 
 CREATE AGGREGATE count(varchar_interval[])
 (
 	sfunc = array_cat,
-	stype = varchar_numeric[],
-	ffunc = _count
+	stype = varchar_interval[],
+	finalfunc = _count
 );
 
 CREATE AGGREGATE count(timestamp_numeric[])
 (
 	sfunc = array_cat,
 	stype = timestamp_numeric[],
-	ffunc = _count
+	finalfunc = _count
 );
 
 CREATE AGGREGATE count(timestamp_varchar[])
 (
 	sfunc = array_cat,
-	stype = timestamp_numeric[],
-	ffunc = _count
+	stype = timestamp_varchar[],
+	finalfunc = _count
 );
 
 CREATE AGGREGATE count(timestamp_timestamp[])
 (
 	sfunc = array_cat,
-	stype = timestamp_numeric[],
-	ffunc = _count
+	stype = timestamp_timestamp[],
+	finalfunc = _count
 );
 
 CREATE AGGREGATE count(timestamp_interval[])
 (
 	sfunc = array_cat,
-	stype = timestamp_numeric[],
-	ffunc = _count
+	stype = timestamp_interval[],
+	finalfunc = _count
 );
 
 CREATE AGGREGATE count(interval_numeric[])
 (
 	sfunc = array_cat,
 	stype = interval_numeric[],
-	ffunc = _count
+	finalfunc = _count
 );
 
 CREATE AGGREGATE count(interval_varchar[])
 (
 	sfunc = array_cat,
-	stype = interval_numeric[],
-	ffunc = _count
+	stype = interval_varchar[],
+	finalfunc = _count
 );
 
 CREATE AGGREGATE count(interval_timestamp[])
 (
 	sfunc = array_cat,
-	stype = interval_numeric[],
-	ffunc = _count
+	stype = interval_timestamp[],
+	finalfunc = _count
 );
 
 CREATE AGGREGATE count(interval_interval[])
 (
 	sfunc = array_cat,
-	stype = interval_numeric[],
-	ffunc = _count
+	stype = interval_interval[],
+	finalfunc = _count
 );

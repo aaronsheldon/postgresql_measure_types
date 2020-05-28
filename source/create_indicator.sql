@@ -25,7 +25,7 @@ $body$
  *
  * Instantiate a representation of an indicator function
  * of an interval. A simple interval implicitly defines a
- * partition contiaing three intervals; the interval before
+ * partition containing three intervals; the interval before
  * the bounded interval, the bounded interval and the interval
  * after the bounded interval. The representation is an array
  * of composite key-value pairs:

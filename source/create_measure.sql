@@ -26,7 +26,7 @@ $body$
  *
  * Instantiate a representation of a measure function
  * of an interval. A simple interval implicitly defines a
- * partition contiaing three intervals; the interval before
+ * partition containing three intervals; the interval before
  * the bounded interval, the bounded interval and the interval
  * after the bounded interval. The representation is an array
  * of composite key-value pairs:
@@ -49,7 +49,7 @@ $body$
  * @param number image of the interval
  * @return table Representation of a simple measurable function
  * @todo return error for incorrect boundaries instead of returning empty set
- * @todo refine type coercion, eliminate unnessecary casting
+ * @todo refine type coercion, eliminate unnecessary casting
  */
 	SELECT
 		a0._key_infinite::BOOLEAN,
@@ -135,7 +135,7 @@ $body$
  *
  * Instantiate a representation of a measure function
  * of an interval. A simple interval implicitly defines a
- * partition contiaing three intervals; the interval before
+ * partition containing three intervals; the interval before
  * the bounded interval, the bounded interval and the interval
  * after the bounded interval. The representation is an array
  * of composite key-value pairs:
@@ -244,7 +244,7 @@ $body$
  *
  * Instantiate a representation of a measure function
  * of an interval. A simple interval implicitly defines a
- * partition contiaing three intervals; the interval before
+ * partition containing three intervals; the interval before
  * the bounded interval, the bounded interval and the interval
  * after the bounded interval. The representation is an array
  * of composite key-value pairs:
@@ -267,7 +267,7 @@ $body$
  * @param timestamp image of the interval
  * @return table Representation of a simple measurable function
  * @todo return error for incorrect boundaries instead of returning empty set
- * @todo refine type coercion, eliminate unnessecary casting
+ * @todo refine type coercion, eliminate unnecessary casting
  */
 	SELECT
 		a0._key_infinite::BOOLEAN,
@@ -353,7 +353,7 @@ $body$
  *
  * Instantiate a representation of a measure function
  * of an interval. A simple interval implicitly defines a
- * partition contiaing three intervals; the interval before
+ * partition containing three intervals; the interval before
  * the bounded interval, the bounded interval and the interval
  * after the bounded interval. The representation is an array
  * of composite key-value pairs:
@@ -376,7 +376,7 @@ $body$
  * @param timespan image of the interval
  * @return table Representation of a simple measurable function
  * @todo return error for incorrect boundaries instead of returning empty set
- * @todo refine type coercion, eliminate unnessecary casting
+ * @todo refine type coercion, eliminate unnecessary casting
  */
 	SELECT
 		a0._key_infinite::BOOLEAN,
